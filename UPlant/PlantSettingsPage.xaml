@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="UPlant.PlantSettingsPage"
+             Title="Настройка растения">
+    <StackLayout Padding="20">
+        <Label x:Name="PhotoTitleLabel"
+               Text="{Binding Name}"
+               FontSize="20"
+               HorizontalOptions="Center"
+               Margin="0,0,0,10"/>
+
+        <Image x:Name="PhotoImage"
+               Source="{Binding Path}"
+               Aspect="AspectFill"
+               HeightRequest="300"
+               VerticalOptions="Center"/>
+
+        <Button Text="Дать новое имя"
+                FontSize="18"
+                Clicked="OnSaveButtonClicked"/>
+        <Button Text="Обновить фото"
+                FontSize="18"
+                Clicked="OnUpdatePhotoClicked"/>
+        <Button Text="Удалить"
+                FontSize="18"
+                Clicked="OnDeleteButtonClicked"/>
+    </StackLayout>
+</ContentPage>

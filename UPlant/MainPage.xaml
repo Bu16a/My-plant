@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="UPlant.MainPage"
+             Title="Главное меню">
+    <Grid RowDefinitions="Auto, *, Auto">
+        <Button Text="Выйти из аккаунта" 
+                FontSize="18"
+                Margin="10"
+                HorizontalOptions="End"
+                Clicked="OnLogoutClicked"
+                Grid.Row="0"/>
+
+        <Button Text="Сделать фото" 
+                FontSize="24"
+                Padding="20"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                Grid.Row="1"
+                Clicked="OnTakePhotoClicked"
+                WidthRequest="300"
+                HeightRequest="300"/>
+
+        <Grid Grid.Row="2" Padding="10,0,10,10" HorizontalOptions="FillAndExpand">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Text="Мои растения" 
+                    Grid.Column="0" 
+                    Clicked="OnMyPlantsClicked"
+                    Margin="2"/>
+            <Button Text="Фото" 
+                    TextColor="Black"
+                    Grid.Column="1" 
+                    Clicked="OnPhotosClicked"
+                    Margin="2"
+                    BackgroundColor="LightBlue"/>
+        </Grid>
+    </Grid>
+</ContentPage>

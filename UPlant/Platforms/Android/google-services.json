@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "654731581791",
+    "project_id": "uplant-36fdf",
+    "storage_bucket": "uplant-36fdf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:654731581791:android:6c7081c903f8ffc67ffeea",
+        "android_client_info": {
+          "package_name": "com.companyname.uplant"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCeIV8Iap29IkTUB456O0saiHtd2arW10E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="UPlant.MyPlantsPage"
+             Title="Мои растения">
+    <Grid RowDefinitions="*, Auto">
+        <CollectionView x:Name="PhotoCollectionView" SelectionMode="Single" SelectionChanged="OnPhotoSelected">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Orientation="Horizontal" Padding="10">
+                        <Label Text="{Binding Name}" 
+                           FontSize="18"
+                           VerticalOptions="Center"
+                           WidthRequest="150"/>
+
+                        <Image Source="{Binding Path}" 
+                           Aspect="AspectFill"
+                           HeightRequest="100"
+                           WidthRequest="100"/>
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Grid Grid.Row="1" Padding="10,0,10,10" HorizontalOptions="FillAndExpand">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Text="Мои растения" 
+                    TextColor="Black"
+                    Grid.Column="0" 
+                    Clicked="OnMyPlantsClicked"
+                    Margin="2"
+                    BackgroundColor="LightBlue"/>
+            <Button Text="Фото" 
+                    Grid.Column="1" 
+                    Clicked="OnPhotosClicked"
+                    Margin="2"/>
+        </Grid>
+    </Grid>
+</ContentPage>
