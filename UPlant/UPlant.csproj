@@ -80,12 +80,18 @@
 	  <Compile Update="ChoosePlantPage.xaml.cs">
 	    <DependentUpon>ChoosePlantPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="PlantInfoPage.xaml.cs">
+	    <DependentUpon>PlantInfoPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="RegisterPage.xaml.cs">
 	    <DependentUpon>RegisterPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 	<ItemGroup>
 	  <MauiXaml Update="ChoosePlantPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="PlantInfoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

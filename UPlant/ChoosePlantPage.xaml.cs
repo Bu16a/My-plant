@@ -1,16 +1,52 @@
-namespace UPlant;
+using System.Collections.ObjectModel;
 
+namespace UPlant;
 public partial class ChoosePlantPage : ContentPage
 {
-    public ChoosePlantPage(List<string> names)
+    public ObservableCollection<string> Items { get; set; } = new();
+
+    public ChoosePlantPage(FileResult fileResult)
     {
         InitializeComponent();
-        StringsCollectionView.ItemsSource = names;
+        BindingContext = this;
+        LoadDataAsync(fileResult);
     }
 
-    private async void OnItemSelected(object sender, SelectionChangedEventArgs e)
+    private async void LoadDataAsync(FileResult fileResult)
     {
-        await DisplayAlert("AAAA", "525252525252", "OK");
-        //PlantDB.AddPlant(new Plant(e.CurrentSelection[0] as string, ))
+        try
+        {
+            var items = await PlantDB.GetPossiblePlantsAsync(fileResult);
+            if (items == null || items.Count == 0)
+            {
+                await DisplayAlert("Ошибка", $"Растения не распознаны", "OK");
+                await Navigation.PopAsync();
+            }
+            else
+            {
+                foreach (var item in items)
+                    Items.Add(item);
+            }
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Ошибка", $"Произошла ошибка: {ex.Message}", "OK");
+            await Navigation.PopAsync();
+        }
+        finally
+        {
+            LoadingIndicator.IsRunning = false;
+            LoadingIndicator.IsVisible = false;
+            ResultListView.IsVisible = true;
+        }
+    }
+
+    private async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
+    {
+        if (e.SelectedItem is string selectedItem)
+        {
+            await Navigation.PushAsync(new PlantInfoPage(selectedItem));
+            ((ListView)sender).SelectedItem = null;
+        }
     }
 }

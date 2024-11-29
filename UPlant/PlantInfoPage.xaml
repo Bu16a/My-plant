@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="UPlant.PlantInfoPage"
+             Title="Информация">
+    <StackLayout Padding="10" Spacing="20">
+        <Label x:Name="PlantNameLabel"
+               Text="Название растения"
+               FontSize="24"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               VerticalOptions="Start" />
+        <StackLayout>
+            <Label Text="Информация о растении:"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Start" />
+            <ActivityIndicator x:Name="LoadingIndicator"
+                               IsRunning="True"
+                               IsVisible="True"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+            <Label x:Name="WateringFrequencyLabel"
+                   Text=""
+                   FontSize="16"
+                   TextColor="Gray"
+                   IsVisible="False"
+                   HorizontalOptions="FillAndExpand" />
+        </StackLayout>
+        <Button x:Name="AddPlantButton"
+                Text="Добавить растение"
+                BackgroundColor="Green"
+                TextColor="White"
+                CornerRadius="10"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="End"
+                Clicked="OnAddPlantClicked" />
+    </StackLayout>
+</ContentPage>

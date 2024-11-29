@@ -3,17 +3,29 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="UPlant.ChoosePlantPage"
              Title="Выберите растение">
-    <VerticalStackLayout Padding="10">
-        <ActivityIndicator x:Name="LoadingIndicator" IsRunning="False" IsVisible="False" HorizontalOptions="Center"/>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
 
-        <CollectionView x:Name="StringsCollectionView" SelectionMode="Single" SelectionChanged="OnItemSelected">
-            <CollectionView.ItemTemplate>
+        <ActivityIndicator x:Name="LoadingIndicator"
+                           IsRunning="True"
+                           IsVisible="True"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+        <ListView x:Name="ResultListView"
+                  IsVisible="False"
+                  ItemsSource="{Binding Items}"
+                  ItemSelected="OnItemSelected">
+            <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Frame Padding="10" Margin="5" BorderColor="LightGray" CornerRadius="5">
-                        <Label Text="{Binding}" FontSize="16" />
-                    </Frame>
+                    <TextCell Text="{Binding .}"
+                              TextColor="Black"/>
                 </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </VerticalStackLayout>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
 </ContentPage>

@@ -48,6 +48,12 @@ build_metadata.AdditionalFiles.ManifestResourceName = UPlant.MyPlantsPage.xaml
 build_metadata.AdditionalFiles.TargetPath = MyPlantsPage.xaml
 build_metadata.AdditionalFiles.RelativePath = MyPlantsPage.xaml
 
+[C:/weplant/UPlant/UPlant/PlantInfoPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = UPlant.PlantInfoPage.xaml
+build_metadata.AdditionalFiles.TargetPath = PlantInfoPage.xaml
+build_metadata.AdditionalFiles.RelativePath = PlantInfoPage.xaml
+
 [C:/weplant/UPlant/UPlant/PlantSettingsPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = UPlant.PlantSettingsPage.xaml

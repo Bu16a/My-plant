@@ -3,8 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="UPlant.MyPlantsPage"
              Title="Мои растения">
+
     <Grid RowDefinitions="*, Auto">
-        <CollectionView x:Name="PhotoCollectionView" SelectionMode="Single" SelectionChanged="OnPhotoSelected">
+        <CollectionView x:Name="PhotoCollectionView" SelectionMode="Single" SelectionChanged="OnPlantSelected">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <StackLayout Orientation="Horizontal" Padding="10">
@@ -12,8 +13,7 @@
                            FontSize="18"
                            VerticalOptions="Center"
                            WidthRequest="150"/>
-
-                        <Image Source="{Binding Path}" 
+                        <Image Source="{Binding ImagePath}"
                            Aspect="AspectFill"
                            HeightRequest="100"
                            WidthRequest="100"/>

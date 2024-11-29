@@ -17,8 +17,7 @@ namespace UPlant
 
         private async void OnSaveButtonClicked(object sender, EventArgs e)
         {
-            string newPlantName = await DisplayPromptAsync("", "", "Ок", "Отмена", "Новое имя", maxLength: 100, keyboard: Keyboard.Text);
-            //await Socket.SendGetRequestAsync();
+            string newPlantName = await DisplayPromptAsync("Введите новое имя", "", "Ок", "Отмена", "Новое имя", maxLength: 100, keyboard: Keyboard.Text);
             if (!string.IsNullOrEmpty(newPlantName))
             {
                 if (newPlantName != plant.Name)
@@ -27,23 +26,7 @@ namespace UPlant
                     PlantDB.SavePlantData();
                     PhotoTitleLabel.Text = plant.Name;
                 }
-                await DisplayAlert("Успешно", "Успешно", "OK");
-            }
-        }
-
-        private async void OnUpdatePhotoClicked(object sender, EventArgs e)
-        {
-            var photo = await MediaPicker.CapturePhotoAsync();
-            if (photo != null)
-            {
-                var newphotoFilePath = Path.Combine(Path.GetDirectoryName(plant.Path), $"{Guid.NewGuid()}.jpg");
-                if (File.Exists(plant.Path))
-                    File.Delete(plant.Path);
-                using var stream = await photo.OpenReadAsync();
-                using var fileStream = File.OpenWrite(newphotoFilePath);
-                await stream.CopyToAsync(fileStream);
-                plant.UpdatePath(newphotoFilePath);
-                await DisplayAlert("Фото обновлено", "Фото обновлено", "OK");
+                await DisplayAlert("Успешно!", "Имя изменено", "OK");
             }
         }
 

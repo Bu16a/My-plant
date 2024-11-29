@@ -18,8 +18,7 @@ public partial class MainPage : ContentPage
         {
             var photo = await MediaPicker.CapturePhotoAsync();
             if (photo != null)
-                await Navigation.PushAsync(new ChoosePlantPage(new() { "Ромашка", "Василёк", "Роза" }));
-            //await Navigation.PushAsync(new ChoosePlantPage(await PlantDB.GetPossiblePlantsAsync(await photo.OpenReadAsync())));
+                await Navigation.PushAsync(new ChoosePlantPage(photo));
         }
         catch (Exception ex)
         {

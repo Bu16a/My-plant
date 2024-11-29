@@ -4,25 +4,5 @@
         <name>UPlant</name>
     </assembly>
     <members>
-        <member name="M:UPlant.FirebaseApi.SignUpAsync(System.String,System.String)">
-            <summary>
-            Регистрация нового пользователя.
-            </summary>
-        </member>
-        <member name="M:UPlant.FirebaseApi.SignInAsync(System.String,System.String)">
-            <summary>
-            Авторизация пользователя.
-            </summary>
-        </member>
-        <member name="M:UPlant.FirebaseApi.Logout">
-            <summary>
-            Выход из системы.
-            </summary>
-        </member>
-        <member name="M:UPlant.FirebaseApi.GetFcmTokenAsync">
-            <summary>
-            Получение FCM токена устройства.
-            </summary>
-        </member>
     </members>
 </doc>
