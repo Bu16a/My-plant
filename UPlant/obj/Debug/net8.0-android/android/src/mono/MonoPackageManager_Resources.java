@@ -19,6 +19,7 @@ public class MonoPackageManager_Resources {
 		"Microsoft.Maui.dll",
 		"Microsoft.Maui.Essentials.dll",
 		"Microsoft.Maui.Graphics.dll",
+		"Newtonsoft.Json.dll",
 		"Plugin.Firebase.Auth.dll",
 		"Plugin.Firebase.CloudMessaging.dll",
 		"Plugin.Firebase.Core.dll",

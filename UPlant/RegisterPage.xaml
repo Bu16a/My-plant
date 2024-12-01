@@ -4,15 +4,15 @@
              x:Class="UPlant.RegisterPage">
 
 
-    <VerticalStackLayout Padding="20" Spacing="15">
+    <VerticalStackLayout VerticalOptions="Center" Padding="20" Spacing="15">
         <Label Text="Email:" />
-        <Entry x:Name="EmailEntry" Placeholder="Enter email" Keyboard="Email" />
+        <Entry x:Name="EmailEntry" Placeholder="Введите email" Keyboard="Email" />
 
-        <Label Text="Password:" />
-        <Entry x:Name="PasswordEntry" Placeholder="Enter password" IsPassword="True" />
+        <Label Text="Пароль:" />
+        <Entry x:Name="PasswordEntry" Placeholder="Введите пароль" IsPassword="True" />
 
-        <Button Text="Sign Up" Clicked="OnSignUpClicked" />
-        <Button Text="Sign In" Clicked="OnSignInClicked" />
+        <Button Text="Зарегистрироватся" Clicked="OnSignUpClicked" />
+        <Button Text="Войти" Clicked="OnSignInClicked" />
 
         <Label x:Name="StatusLabel" Text="" TextColor="Red" HorizontalOptions="Center" />
     </VerticalStackLayout>

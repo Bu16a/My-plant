@@ -4,6 +4,12 @@ uplant.MainActivity;crc64c3dcf94f32d0ff18.MainActivity
 UPlant.MainApplication, UPlant;crc64c3dcf94f32d0ff18.MainApplication
 UPlant.MainApplication;crc64c3dcf94f32d0ff18.MainApplication
 uplant.MainApplication;crc64c3dcf94f32d0ff18.MainApplication
+UPlant.MyFirebaseMessagingService, UPlant;uplant.MyFirebaseMessagingService
+UPlant.MyFirebaseMessagingService;uplant.MyFirebaseMessagingService
+uplant.MyFirebaseMessagingService;uplant.MyFirebaseMessagingService
+UPlant.NotificationActionReceiver, UPlant;uplant.NotificationActionReceiver
+UPlant.NotificationActionReceiver;uplant.NotificationActionReceiver
+uplant.NotificationActionReceiver;uplant.NotificationActionReceiver
 GoogleGson.IExclusionStrategy, GoogleGson;com.google.gson.ExclusionStrategy
 GoogleGson.IExclusionStrategy;com.google.gson.ExclusionStrategy
 com.google.gson.ExclusionStrategy;com.google.gson.ExclusionStrategy

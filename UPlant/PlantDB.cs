@@ -38,7 +38,6 @@ public static class PlantDB
             plants = new();
         else
             plants = JsonSerializer.Deserialize<List<Plant>>(response) ?? new();
-        plants[0].Path = "52";
     }
 
     public static async void SavePlantData() => await FirebaseApi.WriteDatabaseAsync("plants", plants);

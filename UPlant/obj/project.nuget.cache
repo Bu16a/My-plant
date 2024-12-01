@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "USHQsKX+/jw=",
+  "dgSpecHash": "Pi/S4gsJkns=",
   "success": true,
   "projectFilePath": "C:\\weplant\\UPlant\\UPlant\\UPlant.csproj",
   "expectedPackageFiles": [
@@ -29,6 +29,7 @@
     "C:\\Users\\Pasha\\.nuget\\packages\\microsoft.net.illink.tasks\\8.0.11\\microsoft.net.illink.tasks.8.0.11.nupkg.sha512",
     "C:\\Users\\Pasha\\.nuget\\packages\\microsoft.windows.sdk.buildtools\\10.0.22621.756\\microsoft.windows.sdk.buildtools.10.0.22621.756.nupkg.sha512",
     "C:\\Users\\Pasha\\.nuget\\packages\\microsoft.windowsappsdk\\1.5.240627000\\microsoft.windowsappsdk.1.5.240627000.nupkg.sha512",
+    "C:\\Users\\Pasha\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\Pasha\\.nuget\\packages\\plugin.firebase.auth\\3.1.0\\plugin.firebase.auth.3.1.0.nupkg.sha512",
     "C:\\Users\\Pasha\\.nuget\\packages\\plugin.firebase.cloudmessaging\\3.1.1\\plugin.firebase.cloudmessaging.3.1.1.nupkg.sha512",
     "C:\\Users\\Pasha\\.nuget\\packages\\plugin.firebase.core\\3.1.0\\plugin.firebase.core.3.1.0.nupkg.sha512",

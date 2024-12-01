@@ -1,9 +1,7 @@
 ﻿using Android.App;
-using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Firebase;
-using Plugin.Firebase.CloudMessaging;
 
 namespace UPlant
 {
@@ -14,36 +12,19 @@ namespace UPlant
         {
             base.OnCreate(savedInstanceState);
             FirebaseApp.InitializeApp(this);
-            HandleIntent(Intent);
-            CreateNotificationChannelIfNeeded();
-        }
-
-        protected override void OnNewIntent(Intent intent)
-        {
-            base.OnNewIntent(intent);
-            HandleIntent(intent);
-        }
-
-        private static void HandleIntent(Intent intent)
-        {
-            FirebaseCloudMessagingImplementation.OnNewIntent(intent);
-        }
-
-        private void CreateNotificationChannelIfNeeded()
-        {
             if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
             {
-                CreateNotificationChannel();
-            }
-        }
+                var channel = new NotificationChannel(
+                    "default_channel",
+                    "Important Notifications",
+                    NotificationImportance.High)
+                {
+                    Description = "Notifications with immediate actions"
+                };
 
-        private void CreateNotificationChannel()
-        {
-            var channelId = $"{PackageName}.general";
-            var notificationManager = (NotificationManager)GetSystemService(NotificationService);
-            var channel = new NotificationChannel(channelId, "General", NotificationImportance.Default);
-            notificationManager.CreateNotificationChannel(channel);
-            FirebaseCloudMessagingImplementation.ChannelId = channelId;
+                var notificationManager = (NotificationManager)GetSystemService(NotificationService);
+                notificationManager.CreateNotificationChannel(channel);
+            }
         }
     }
 }

@@ -19,7 +19,7 @@ public partial class ChoosePlantPage : ContentPage
             var items = await PlantDB.GetPossiblePlantsAsync(fileResult);
             if (items == null || items.Count == 0)
             {
-                await DisplayAlert("Ошибка", $"Растения не распознаны", "OK");
+                await DisplayAlert("Ошибка", $"На фото растений не найдено", "OK");
                 await Navigation.PopAsync();
             }
             else
@@ -30,7 +30,7 @@ public partial class ChoosePlantPage : ContentPage
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Ошибка", $"Произошла ошибка: {ex.Message}", "OK");
+            await DisplayAlert("Ошибка", $"Ошибка распознавания. Попробуйте позже", "OK");
             await Navigation.PopAsync();
         }
         finally
