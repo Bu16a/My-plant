@@ -5,6 +5,7 @@ import os
 import requests
 import tempfile
 from prompts import Prompts
+import re
 
 app = web.Application()
 
@@ -24,7 +25,22 @@ async def gpt_query_g4f(request):
         model = getattr(g4f.models, model_name, g4f.models.default) if model_name else g4f.models.default
 
         result = await get_gpt_response_g4f(user_query, model=model)
-        return web.json_response({"result": result})
+        return web.json_response({"result": result.strip()})
+
+    except Exception as e:
+        return web.json_response({"error": f"Error processing request: {e}"}, status=500)
+
+
+async def get_gz(request):
+    try:
+        data = await request.json()
+        user_query = data.get("flower")
+        user_query = Prompts.flower_instruction + user_query
+        if not user_query:
+            return web.json_response({"error": "Query parameter is required"}, status=400)
+        result = get_text_response(user_query).replace('\n', '').strip()
+        # result = await get_gpt_response_g4f(user_query, model=g4f.models.default)
+        return web.json_response({"hz": int(result)})
 
     except Exception as e:
         return web.json_response({"error": f"Error processing request: {e}"}, status=500)
@@ -97,11 +113,15 @@ async def image_analysis_file(request):
         else:
             prompt = Prompts.image_flower_prompt
 
-        result = analyze_image_with_prompt(image_path, prompt)
-
+        result = analyze_image_with_prompt(image_path, prompt).replace('\n', '').split(',')
+        for i in range(len(result)):
+            result[i] = re.sub(r'[.,\"#?!]', '', result[i]).strip()
+        result = list(set(result))
+        if 'Растений_нет' in result:
+            result = []
         os.remove(image_path)
 
-        return web.json_response({"analysis": result})
+        return web.json_response(result)
 
     except Exception as e:
         return web.json_response({"error": f"Error processing image: {e}"}, status=500)
@@ -166,6 +186,7 @@ app.router.add_post("/image-analysis-gemini", image_analysis_gemini)
 app.router.add_post("/image-analysis-file", image_analysis_file)
 app.router.add_post("/save-image-with-id", save_image_with_id)
 app.router.add_post("/get-image-by-id", get_image_by_id)
+app.router.add_post('/get_gz', get_gz)
 
 if __name__ == "__main__":
     web.run_app(app, host="0.0.0.0", port=52)
