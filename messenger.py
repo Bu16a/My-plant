@@ -1,3 +1,5 @@
+import json
+
 import firebase_admin
 from firebase_admin import credentials, db, messaging
 from datetime import datetime, timedelta
@@ -26,7 +28,7 @@ def get_object_from_db(path):
         return None
 
 
-def send_notification(device_token, event, name):
+def send_notification(device_token, title, body):
     """
     Отправляет уведомление на устройство через FCM.
 
@@ -34,16 +36,24 @@ def send_notification(device_token, event, name):
     :param title: Заголовок уведомления.
     :param body: Текст уведомления.
     """
+    buttons = [
+        {"title": "Полил!", "action": "watered"},
+        {"title": "Не могу(", "action": "unwatered"},
+    ]
+    data_payload = {
+        "buttons": json.dumps(buttons)
+    }
     try:
         message = messaging.Message(
             notification=messaging.Notification(
-                title="UPlant", body=f"{name} needs {event}!"
+                title=title,
+                body=body
             ),
             token=device_token,
-            android=messaging.AndroidConfig(priority="high"),
+            data=data_payload
         )
         response = messaging.send(message)
-        print(f"Уведомление успешно отправлено {name}! ID сообщения: {response}")
+        print(f"Уведомление успешно отправлено {body}! ID сообщения: {response}")
         return True
     except Exception as e:
         print(f"Ошибка отправки уведомления: {e}")
@@ -56,6 +66,9 @@ def check_and_send_notifications():
         return
     today = datetime.now()  # Текущее время
     for user_id, user_data in users.items():
+        if "fcm_token" not in user_data.keys():
+            continue
+
         device_token = user_data["fcm_token"]
         ind = 0
         for plant_data in user_data["plants"]:
@@ -66,14 +79,14 @@ def check_and_send_notifications():
             freq = plant_data["Watering"]  # Интервал в строковом формате HH:MM:SS
 
             # Преобразуем интервал в timedelta
-            interval_timedelta = timedelta(hours=int(freq))
+            interval_timedelta = timedelta(seconds=int(freq))
 
             # Преобразуем время последнего уведомления
             last_watering_datetime = datetime.fromisoformat(last_watering)
 
             # Проверяем, прошло ли достаточно времени
             if today - last_watering_datetime >= interval_timedelta:
-                if send_notification(device_token, "water", plant_name):
+                if send_notification(device_token, "Полив", f"Полейте {plant_name}"):
                     # Обновляем время последнего уведомления в Firebase
                     update_last_notification(plant_data, today, user_id, ind)
             ind += 1
@@ -88,15 +101,10 @@ def update_last_notification(plant_data, today, user_id, ind):
 
 if __name__ == "__main__":
     # print(get_object_from_db("Users"))
-    # plant_ref = db.reference("Users/5Gkpk2uvuEXOR661baOCAGYqYDm2/plants/0")
-    # plant_ref.update({'Genus': 'Ромашка лекарственная', 'Name': 'Гойда', 'NeedToNotify': False, 'Path': '123', 'Watering': 72, 'Last_watering': '2024-11-29T18:24:29.495507'})
-    # print(get_object_from_db("Users/5Gkpk2uvuEXOR661baOCAGYqYDm2/plants/0"))
-    # check_and_send_notifications()
-    # print(get_object_from_db("Users"))
     schedule.every(5).minutes.do(check_and_send_notifications)
 
     print("Планировщик запущен. Ожидание заданий...")
 
     while True:
         schedule.run_pending()
-        time.sleep(300)  # Проверяем задания каждую минуту
+        time.sleep(150)
