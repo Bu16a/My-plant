@@ -10,13 +10,18 @@
                 <DataTemplate>
                     <StackLayout Orientation="Horizontal" Padding="10">
                         <Label Text="{Binding Name}" 
-                           FontSize="18"
-                           VerticalOptions="Center"
-                           WidthRequest="150"/>
-                        <Image Source="{Binding ImagePath}"
-                           Aspect="AspectFill"
-                           HeightRequest="100"
-                           WidthRequest="100"/>
+                               FontSize="18"
+                               VerticalOptions="Center"
+                               WidthRequest="150" />
+                        <Grid>
+                            <ActivityIndicator IsRunning="{Binding IsImageLoading}"
+                                               IsVisible="{Binding IsImageLoading}" />
+                            <Image Source="{Binding ImagePath}"
+                                   Aspect="AspectFill"
+                                   HeightRequest="100"
+                                   WidthRequest="100"
+                                   IsVisible="{Binding IsImageLoaded}" />
+                        </Grid>
                     </StackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

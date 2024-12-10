@@ -4,19 +4,21 @@ namespace UPlant;
 public partial class ChoosePlantPage : ContentPage
 {
     public ObservableCollection<string> Items { get; set; } = new();
+    private FileResult image;
 
-    public ChoosePlantPage(FileResult fileResult)
+    public ChoosePlantPage(FileResult image)
     {
+        this.image = image;
         InitializeComponent();
         BindingContext = this;
-        LoadDataAsync(fileResult);
+        LoadDataAsync();
     }
 
-    private async void LoadDataAsync(FileResult fileResult)
+    private async void LoadDataAsync()
     {
         try
         {
-            var items = await PlantDB.GetPossiblePlantsAsync(fileResult);
+            var items = await PlantDB.GetPossiblePlantsAsync(image);
             if (items == null || items.Count == 0)
             {
                 await DisplayAlert("Ошибка", $"На фото растений не найдено", "OK");
@@ -45,7 +47,7 @@ public partial class ChoosePlantPage : ContentPage
     {
         if (e.SelectedItem is string selectedItem)
         {
-            await Navigation.PushAsync(new PlantInfoPage(selectedItem));
+            await Navigation.PushAsync(new PlantInfoPage(selectedItem, image));
             ((ListView)sender).SelectedItem = null;
         }
     }

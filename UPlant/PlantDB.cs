@@ -1,16 +1,13 @@
-﻿using Microsoft.Maui.Storage;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+
 
 namespace UPlant;
+
 public static class PlantDB
 {
     private static string _server;
@@ -48,15 +45,21 @@ public static class PlantDB
     {
         var filePath = Path.Combine(_cache, $"{id}.jpg");
         if (File.Exists(filePath)) return filePath;
-        var content = new StringContent(JsonSerializer.Serialize(new Dictionary<string,string>() { { "identifier", id } }), Encoding.UTF8, "application/json");
+        var content = new StringContent(JsonSerializer.Serialize(new Dictionary<string, string>() { { "identifier", id } }), Encoding.UTF8, "application/json");
         var response = await _httpClient.PostAsync($"{_server}get-image-by-id", content);
         await File.WriteAllBytesAsync(filePath, await response.Content.ReadAsByteArrayAsync());
         return filePath;
     }
 
-    public static async Task SaveImage(FileResult fileResult)
+    public static async Task SaveImage(FileResult file, string name)
     {
-
+        using var multipartContent = new MultipartFormDataContent();
+        var fileContent = new StreamContent(await file.OpenReadAsync());
+        fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
+        multipartContent.Add(fileContent, "file", name);
+        multipartContent.Add(new StringContent(name), "identifier");
+        var response = await _httpClient.PostAsync($"{_server}save-image-with-id", multipartContent);
+        response.EnsureSuccessStatusCode();
     }
 
     public static async Task<List<string>> GetPossiblePlantsAsync(FileResult file)
@@ -76,43 +79,60 @@ public static class PlantDB
     }
 }
 
-public class Plant(string name, string path, string genus, int watering)
+public class Plant : INotifyPropertyChanged
 {
-    public string Name { get; private set; } = name;
-    public string Path { get; set; } = path;
-    public string Genus { get; } = genus;
-    public int Watering { get; } = watering;
-    public bool NeedToNotify { get; } = false;
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
+
+    [JsonPropertyName("id")]
+    public string Id { get; set; }
+
+    [JsonPropertyName("genus")]
+    public string Genus { get; set; }
+
+    [JsonIgnore]
+    private int watering;
+    [JsonPropertyName("watering")]
+    public int Watering { get => watering; set { watering = value; OnPropertyChanged(); } }
+
+    [JsonPropertyName("is_notify")]
+    public bool NeedToNotify { get; set; }
+
+
+    [JsonIgnore]
+    private bool isImageLoading = true;
+    [JsonIgnore]
+    private bool isImageLoaded = false;
+    [JsonIgnore]
+    private string imagePath;
+
+    [JsonIgnore]
+    public bool IsImageLoading { get => isImageLoading; set { isImageLoading = value; OnPropertyChanged(); } }
+
+    [JsonIgnore]
+    public bool IsImageLoaded { get => isImageLoaded; set { isImageLoaded = value; OnPropertyChanged(); } }
+
+    [JsonIgnore]
+    public string ImagePath { get => imagePath; private set { imagePath = value; OnPropertyChanged(); } }
+
+    public async Task LoadImagePathAsync()
+    {
+        IsImageLoading = true;
+        ImagePath = await PlantDB.GetImagePath(Id);
+        IsImageLoading = false;
+        IsImageLoaded = true;
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 
     public void UpdateName(string newName)
     {
         Name = newName;
         PlantDB.SavePlantData();
     }
-
-    //private string _imagePath;
-    //public string ImagePath
-    //{
-    //    get => _imagePath;
-    //    set
-    //    {
-    //        if (_imagePath != value)
-    //        {
-    //            _imagePath = value;
-    //            OnPropertyChanged();
-    //        }
-    //    }
-    //}
-    //public async Task LoadImagePathAsync()
-    //{
-    //    ImagePath = await PlantDB.GetImagePath(Path);
-    //}
-
-
-    //public event PropertyChangedEventHandler PropertyChanged;
-
-    //protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-    //{
-    //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    //}
 }

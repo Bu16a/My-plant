@@ -23,7 +23,6 @@ namespace UPlant
                 if (newPlantName != plant.Name)
                 {
                     plant.UpdateName(newPlantName);
-                    PlantDB.SavePlantData();
                     PhotoTitleLabel.Text = plant.Name;
                 }
                 await DisplayAlert("Успешно!", "Имя изменено", "OK");
@@ -37,6 +36,17 @@ namespace UPlant
                 PlantDB.DeletePlant(plant);
                 await Navigation.PopAsync();
             }
+        }
+
+        private void OnNeedToNotifyToggled(object sender, ToggledEventArgs e)
+        {
+            plant.NeedToNotify = e.Value;
+            PlantDB.SavePlantData();
+        }
+
+        private void OnWateringDragCompleted(object sender, EventArgs e)
+        {
+            PlantDB.SavePlantData();
         }
     }
 }

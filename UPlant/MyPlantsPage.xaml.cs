@@ -8,16 +8,37 @@ namespace UPlant;
 
 public partial class MyPlantsPage : ContentPage
 {
+    public ObservableCollection<Plant> Plants { get; set; } = new();
+
     public MyPlantsPage()
     {
         InitializeComponent();
     }
 
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
-        PhotoCollectionView.ItemsSource = null;
-        PhotoCollectionView.ItemsSource = PlantDB.Plants;
+        await LoadPlantsAsync();
+        PhotoCollectionView.ItemsSource = Plants;
+    }
+
+    private async Task LoadPlantsAsync()
+    {
+        Plants.Clear();
+
+        foreach (var plant in PlantDB.Plants)
+        {
+            Plants.Add(plant);
+            _ = Task.Run(async () =>
+            {
+                await plant.LoadImagePathAsync();
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    plant.IsImageLoading = false;
+                    plant.IsImageLoaded = true;
+                });
+            });
+        }
     }
 
     private async void OnPlantSelected(object sender, SelectionChangedEventArgs e)

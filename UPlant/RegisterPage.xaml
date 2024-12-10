@@ -11,7 +11,7 @@
         <Label Text="Пароль:" />
         <Entry x:Name="PasswordEntry" Placeholder="Введите пароль" IsPassword="True" />
 
-        <Button Text="Зарегистрироватся" Clicked="OnSignUpClicked" />
+        <Button Text="Зарегистрироваться" Clicked="OnSignUpClicked" />
         <Button Text="Войти" Clicked="OnSignInClicked" />
 
         <Label x:Name="StatusLabel" Text="" TextColor="Red" HorizontalOptions="Center" />

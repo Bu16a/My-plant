@@ -174,3 +174,6 @@ C:\weplant\UPlant\UPlant\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\qualifie
 C:\weplant\UPlant\UPlant\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\qualifiers.txt.intermediate
 C:\weplant\UPlant\UPlant\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\MultipleQualifiersPerDimensionFound.txt
 C:\weplant\UPlant\UPlant\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\ProjectArchitectures.txt
+C:\weplant\UPlant\UPlant\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Microsoft.Maui.Controls.HotReload.Forms.dll
+C:\weplant\UPlant\UPlant\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Microsoft.VisualStudio.DesignTools.MobileTapContracts.dll
+C:\weplant\UPlant\UPlant\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Microsoft.VisualStudio.DesignTools.TapContract.dll

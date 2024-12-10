@@ -303,3 +303,6 @@ C:\weplant\UPlant\UPlant\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\refint\UPl
 C:\weplant\UPlant\UPlant\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\UPlant.pdb
 C:\weplant\UPlant\UPlant\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\UPlant.genruntimeconfig.cache
 C:\weplant\UPlant\UPlant\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\ref\UPlant.dll
+C:\weplant\UPlant\UPlant\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\Microsoft.Maui.Controls.HotReload.Forms.dll
+C:\weplant\UPlant\UPlant\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\Microsoft.VisualStudio.DesignTools.MobileTapContracts.dll
+C:\weplant\UPlant\UPlant\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\Microsoft.VisualStudio.DesignTools.TapContract.dll

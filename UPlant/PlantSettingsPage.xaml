@@ -3,23 +3,46 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="UPlant.PlantSettingsPage"
              Title="Настройка растения">
-    <StackLayout Padding="20">
+    <StackLayout Padding="20" Spacing="15">
+        <!-- Название растения -->
         <Label x:Name="PhotoTitleLabel"
                Text="{Binding Name}"
                FontSize="20"
                HorizontalOptions="Center"
                Margin="0,0,0,10"/>
+
+        <!-- Фото растения -->
         <Image x:Name="PhotoImage"
-               Source="{Binding Path}"
+               Source="{Binding ImagePath}"
                Aspect="AspectFill"
                HeightRequest="300"
                VerticalOptions="Center"/>
+
+        <!-- Род растения -->
         <Label x:Name="GenusLabel"
-               Text="{Binding Genus}"
+               Text="{Binding Genus, StringFormat='Род: {0}'}"
                FontSize="20"
                HorizontalOptions="Center"
                Margin="0,0,0,10"/>
 
+        <!-- Переключатель уведомлений -->
+        <StackLayout Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Center">
+            <Label Text="Уведомлять" VerticalOptions="Center" FontSize="18"/>
+            <Switch IsToggled="{Binding NeedToNotify}" 
+                    VerticalOptions="Center" 
+                    Toggled="OnNeedToNotifyToggled"/>
+        </StackLayout>
+
+        <!-- Измерение Watering -->
+        <Label Text="Частота полива (часы)" FontSize="18" HorizontalOptions="Center"/>
+        <Slider Minimum="12" Maximum="240"
+                Value="{Binding Watering}"
+                DragCompleted="OnWateringDragCompleted"/>
+        <Label Text="{Binding Watering, StringFormat='Каждые {0} часа(-ов)'}" 
+               FontSize="16" 
+               HorizontalOptions="Center" />
+
+        <!-- Кнопки управления -->
         <Button Text="Изменить имя"
                 FontSize="18"
                 Clicked="OnSaveButtonClicked"/>

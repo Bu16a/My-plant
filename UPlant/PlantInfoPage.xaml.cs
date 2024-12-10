@@ -4,11 +4,13 @@ public partial class PlantInfoPage : ContentPage
 {
     private readonly string genus;
     private int watering = 0;
+    private FileResult image;
 
-    public PlantInfoPage(string genus)
+    public PlantInfoPage(string genus, FileResult image)
     {
-        InitializeComponent();
         this.genus = genus;
+        this.image = image;
+        InitializeComponent();
         PlantNameLabel.Text = genus;
         LoadWateringFrequencyAsync();
     }
@@ -36,8 +38,9 @@ public partial class PlantInfoPage : ContentPage
     private async void OnAddPlantClicked(object sender, EventArgs e)
     {
         if (watering == 0) return;
-
-        PlantDB.AddPlant(new Plant(genus, "123", genus, watering));
+        var id = Guid.NewGuid().ToString();
+        await PlantDB.SaveImage(image, id);
+        PlantDB.AddPlant(new Plant { Genus = genus, Id = id, Name = genus, Watering = watering, NeedToNotify = false });
         await DisplayAlert("Успех", $"Добавлено в ваш список!", "OK");
         Application.Current.MainPage = new NavigationPage(new MyPlantsPage());
     }
