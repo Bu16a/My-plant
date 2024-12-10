@@ -27,7 +27,7 @@ class AsyncServer:
         self.app.router.add_post('/get_gz', self.get_gz)
 
     @staticmethod
-    async def root() -> Response:
+    async def root(request: Request) -> Response:
         return web.json_response({"message": "Async aiohttp server is running"})
 
     async def gpt_query_g4f(self, request: Request) -> Response:
