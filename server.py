@@ -1,19 +1,21 @@
 from aiohttp import web
 from aiohttp.web_request import Request
 from aiohttp.web_response import Response
-from handlers import AIModelHandler
 import g4f
 import os
 import requests
 import tempfile
 from prompts import Prompts
 import re
+from ai_handlers import AIModelHandler
+from file_handlers import FileHandler
 
 
 class AsyncServer:
     def __init__(self) -> None:
         self.app: web.Application = web.Application()
         self.model_handler: AIModelHandler = AIModelHandler()
+        self.file_handler : FileHandler = FileHandler()
         self.setup_routes()
 
     def setup_routes(self) -> None:
@@ -22,8 +24,8 @@ class AsyncServer:
         self.app.router.add_post("/gpt-query-gemini", self.gpt_query_gemini)
         self.app.router.add_post("/image-analysis-gemini", self.image_analysis_gemini)
         self.app.router.add_post("/image-analysis-file", self.image_analysis_file)
-        self.app.router.add_post("/save-image-with-id", self.save_image_with_id)
-        self.app.router.add_post("/get-image-by-id", self.get_image_by_id)
+        self.app.router.add_post("/save-image-with-id", self.file_handler.save_image_with_id)
+        self.app.router.add_post("/get-image-by-id", self.file_handler.get_image_by_id)
         self.app.router.add_post('/get_gz', self.get_gz)
 
     @staticmethod
@@ -134,57 +136,3 @@ class AsyncServer:
 
         except Exception as e:
             return web.json_response({"error": f"Error processing image: {e}"}, status=500)
-
-    @staticmethod
-    async def save_image_with_id(request: Request) -> Response:
-        try:
-            reader = await request.multipart()
-            file_field = await reader.next()
-            if file_field.name != "file":
-                return web.json_response({"error": "Parameter 'file' is required"}, status=400)
-
-            with tempfile.NamedTemporaryFile(delete=False) as temp_file:
-                while True:
-                    chunk: bytes = await file_field.read_chunk()
-                    if not chunk:
-                        break
-                    temp_file.write(chunk)
-                temp_file_path: str = temp_file.name
-
-            text_field = await reader.next()
-            identifier: str = await text_field.text()
-            if not identifier.strip():
-                return web.json_response({"error": "Identifier cannot be empty"}, status=400)
-
-            save_folder: str = "uploaded_images"
-            os.makedirs(save_folder, exist_ok=True)
-            save_path: str = os.path.join(save_folder, f"{identifier}.jpg")
-            os.replace(temp_file_path, save_path)
-
-            return web.json_response({"message": f"File saved successfully as {save_path}"})
-
-        except Exception as e:
-            return web.json_response({"error": f"Error saving file: {e}"}, status=500)
-
-    @staticmethod
-    async def get_image_by_id(request: Request) -> Response:
-        try:
-            data: dict = await request.json()
-            identifier: str = data.get("identifier")
-            if not identifier:
-                return web.json_response({"error": "Parameter 'identifier' is required"}, status=400)
-
-            save_folder: str = "uploaded_images"
-            image_path: str = os.path.join(save_folder, f"{identifier}.jpg")
-            if not os.path.exists(image_path):
-                return web.json_response({"error": f"Image with identifier '{identifier}' not found"}, status=404)
-
-            return web.FileResponse(image_path)
-
-        except Exception as e:
-            return web.json_response({"error": f"Error retrieving image: {e}"}, status=500)
-
-
-if __name__ == "__main__":
-    server = AsyncServer()
-    web.run_app(server.app, host="0.0.0.0", port=52)

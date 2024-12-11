@@ -22,8 +22,8 @@ class AIModelHandler:
                 if response:
                     return response.choices[0].message.content
             except Exception as e:
-                print(f"Попытка {attempt + 1} с g4f не удалась: {e}")
-        return "Не удалось получить ответ от g4f после нескольких попыток."
+                print(f"Attempt {attempt + 1} with g4f failed: {e}")
+        return "Failed to get a response from g4f after several attempts."
 
     @staticmethod
     def analyze_image_with_prompt(image_path: str, prompt: str) -> str:
@@ -40,18 +40,18 @@ class AIModelHandler:
             total_time = time.time() - start_time
             print(f"Upload time: {upload_time}s, Generate time: {generate_time}s, Total time: {total_time}s")
 
-            return result.text if hasattr(result, "text") else "Анализ изображения не удался или не содержит текста."
+            return result.text if hasattr(result, "text") else "Image analysis failed or contains no text."
         except Exception as e:
-            return f"Произошла ошибка при анализе изображения: {e}"
+            return f"An error occurred during image analysis: {e}"
 
     @staticmethod
     def get_text_response(prompt: str) -> str:
         try:
             model = genai.GenerativeModel("gemini-1.5-flash")
             result = model.generate_content([prompt])
-            return result.text if hasattr(result, "text") else "Ответ от модели не содержит текста."
+            return result.text if hasattr(result, "text") else "The model's response contains no text."
         except Exception as e:
-            return f"Произошла ошибка при обработке текстового запроса: {e}"
+            return f"An error occurred while processing the text request: {e}"
 
     @staticmethod
     def compress_image(input_path: str, output_path: str, quality: int = 85, max_size: tuple = (1024, 1024)) -> None:
@@ -60,4 +60,4 @@ class AIModelHandler:
                 img.thumbnail(max_size, Image.LANCZOS)
                 img.save(output_path, format="JPEG", quality=quality, optimize=True)
         except Exception as e:
-            print(f"Ошибка при сжатии изображения: {e}")
+            print(f"Error during image compression: {e}")
