@@ -1,7 +1,8 @@
 import os
 import pytest
 from aiohttp.test_utils import TestClient, TestServer
-from server import AsyncServer
+
+from container import AppContainer
 from aiohttp import MultipartWriter, FormData
 
 pytest_plugins = ["aiohttp.pytest_plugin"]
@@ -9,7 +10,8 @@ pytest_plugins = ["aiohttp.pytest_plugin"]
 
 @pytest.fixture
 async def client(aiohttp_client) -> TestClient:
-    server = AsyncServer()
+    container = AppContainer()
+    server = container.async_server()
     return await aiohttp_client(server.app)
 
 
