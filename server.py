@@ -33,7 +33,7 @@ class AsyncServer:
     async def gpt_query_g4f(self, request: Request) -> Response:
         try:
             data: dict = await request.json()
-            user_query: str = data.get("query", Prompts.watering_schedule)
+            user_query: str = data.get("query")
             if not user_query:
                 return web.json_response({"error": "Query parameter is required"}, status=400)
 
@@ -41,6 +41,8 @@ class AsyncServer:
             model = getattr(g4f.models, model_name, g4f.models.default) if model_name else g4f.models.default
 
             result: str = await self.model_handler.get_gpt_response_g4f(user_query, model=model)
+            if not result.strip():
+                return web.json_response({"error": "Model returned an empty result"}, status=500)
             return web.json_response({"result": result.strip()})
 
         except Exception as e:
@@ -50,9 +52,9 @@ class AsyncServer:
         try:
             data: dict = await request.json()
             user_query: str = data.get("flower")
-            user_query = Prompts.flower_instruction + user_query
             if not user_query:
                 return web.json_response({"error": "Query parameter is required"}, status=400)
+            user_query = Prompts.flower_instruction + user_query
 
             result: str = self.model_handler.get_text_response(user_query).replace('\n', '').strip()
             return web.json_response({"hz": int(result)})
@@ -63,7 +65,7 @@ class AsyncServer:
     async def gpt_query_gemini(self, request: Request) -> Response:
         try:
             data: dict = await request.json()
-            user_query: str = data.get("query", Prompts.watering_schedule)
+            user_query: str = data.get("query")
             if not user_query:
                 return web.json_response({"error": "Query parameter is required"}, status=400)
 
@@ -102,9 +104,11 @@ class AsyncServer:
 
     async def image_analysis_file(self, request: Request) -> Response:
         try:
+            if not request.content_type.startswith("multipart/"):
+                return web.json_response({"error": "Content-Type must be multipart/form-data"}, status=400)
             reader = await request.multipart()
             field = await reader.next()
-            if field.name != "file":
+            if not field or field.name != "file":
                 return web.json_response({"error": "Parameter 'file' is required"}, status=400)
 
             with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as temp_file:

@@ -8,9 +8,6 @@ class Prompts(StrEnum):
             " Выведи только названия через запятую. Пример ответа: Роза Бархатцы Пионы. Если на картинке " +
             "нет растений то вывести слово - Растений_нет. Всегда выводи как указано в примере!")
 
-    watering_schedule = ('Составь подробный план полива для растения роза. Укажи расписание полива на ' +
-                         'месяц, выдай ответ в формате списка, дату у время полива')
-
     flower_instruction = (
             'Print the frequency of watering in hours for the specified plant, i.e. Answer by indicating only one number,' +
             ' number of hours. Example answer: 4. That is. your answer must be only a number without letters, only one' +
