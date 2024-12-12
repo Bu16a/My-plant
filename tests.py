@@ -1,3 +1,4 @@
+import asyncio
 import os
 import pytest
 from aiohttp.test_utils import TestClient, TestServer
@@ -168,3 +169,46 @@ class TestAPI:
 
         assert resp.status == 200, "Expected 200 OK for successful image retrieval"
         assert resp.content_type == "image/jpeg", "Expected image/jpeg content type"
+
+    # Тест на асинхронное сохранение и получение изображений
+    async def test_async_save_and_retrieve_images(self, client):
+        async def upload_image(identifier, file_content):
+            with MultipartWriter("form-data") as mpwriter:
+                mpwriter.append(file_content, {
+                    "Content-Disposition": f'form-data; name="file"; filename="{identifier}.jpg"',
+                    "Content-Type": "image/jpeg"
+                })
+                mpwriter.append(identifier, {"Content-Disposition": 'form-data; name="identifier"'})
+                resp = await client.post("/save-image-with-id", data=mpwriter)
+                assert resp.status == 200, f"Upload failed for {identifier}"
+
+        async def get_image(identifier):
+            payload = {"identifier": identifier}
+            resp = await client.post("/get-image-by-id", json=payload)
+            assert resp.status == 200, f"Retrieval failed for {identifier}"
+            assert resp.content_type == "image/jpeg"
+
+        await asyncio.gather(
+            upload_image("image1", b"fake_image_data1"),
+            upload_image("image2", b"fake_image_data2"))
+
+        await asyncio.gather(get_image("image1"), get_image("image2"))
+
+    # Тест на одновременный доступ к одному и тому же изображению
+    # Одновременные запросы на получение одного и того же файла
+    async def test_simultaneous_image_access(self, client):
+        with MultipartWriter("form-data") as mpwriter:
+            mpwriter.append(b"fake_image_data", {
+                "Content-Disposition": 'form-data; name="file"; filename="test_image.jpg"',
+                "Content-Type": "image/jpeg"})
+            mpwriter.append("shared_image", {"Content-Disposition": 'form-data; name="identifier"'})
+            save_resp = await client.post("/save-image-with-id", data=mpwriter)
+            assert save_resp.status == 200, "Image upload failed"
+
+        async def get_shared_image():
+            payload = {"identifier": "shared_image"}
+            resp = await client.post("/get-image-by-id", json=payload)
+            assert resp.status == 200, "Failed to retrieve shared image"
+            assert resp.content_type == "image/jpeg"
+
+        await asyncio.gather(get_shared_image(), get_shared_image())
