@@ -27,13 +27,9 @@
                    IsVisible="False"
                    HorizontalOptions="FillAndExpand" />
         </StackLayout>
-        <Button x:Name="AddPlantButton"
+        <Button x:Name="AddButton"
                 Text="Добавить растение"
-                BackgroundColor="Green"
-                TextColor="White"
-                CornerRadius="10"
-                HorizontalOptions="FillAndExpand"
-                VerticalOptions="End"
-                Clicked="OnAddPlantClicked" />
+                Clicked="OnAddPlantClicked"
+                HorizontalOptions="Center" />
     </StackLayout>
 </ContentPage>

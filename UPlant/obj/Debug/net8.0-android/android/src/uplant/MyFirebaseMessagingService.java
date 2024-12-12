@@ -10,6 +10,7 @@ public class MyFirebaseMessagingService
 	public static final String __md_methods;
 	static {
 		__md_methods = 
+			"n_onCreate:()V:GetOnCreateHandler\n" +
 			"n_onMessageReceived:(Lcom/google/firebase/messaging/RemoteMessage;)V:GetOnMessageReceived_Lcom_google_firebase_messaging_RemoteMessage_Handler\n" +
 			"";
 		mono.android.Runtime.register ("UPlant.MyFirebaseMessagingService, UPlant", MyFirebaseMessagingService.class, __md_methods);
@@ -23,6 +24,14 @@ public class MyFirebaseMessagingService
 			mono.android.TypeManager.Activate ("UPlant.MyFirebaseMessagingService, UPlant", "", this, new java.lang.Object[] {  });
 		}
 	}
+
+
+	public void onCreate ()
+	{
+		n_onCreate ();
+	}
+
+	private native void n_onCreate ();
 
 
 	public void onMessageReceived (com.google.firebase.messaging.RemoteMessage p0)

@@ -1,15 +1,24 @@
+using UPlant.Domain.Interfaces;
+using UPlant.Domain.Models;
+
 namespace UPlant;
 
 public partial class PlantInfoPage : ContentPage
 {
-    private readonly string genus;
-    private int watering = 0;
-    private FileResult image;
+    private readonly string _genus;
+    private int _watering = 0;
+    private readonly FileResult _image;
+    private readonly IPlantRepository _plantRepository;
+    private readonly IServiceProvider _serviceProvider;
+    private readonly INavigationService _navigationService;
 
-    public PlantInfoPage(string genus, FileResult image)
+    public PlantInfoPage(string genus, FileResult image, IPlantRepository plantRepository, IServiceProvider serviceProvider, INavigationService navigationService)
     {
-        this.genus = genus;
-        this.image = image;
+        _genus = genus;
+        _image = image;
+        _plantRepository = plantRepository;
+        _serviceProvider = serviceProvider;
+        _navigationService = navigationService;
         InitializeComponent();
         PlantNameLabel.Text = genus;
         LoadWateringFrequencyAsync();
@@ -19,13 +28,13 @@ public partial class PlantInfoPage : ContentPage
     {
         try
         {
-            watering = await PlantDB.GetWateringHZ(genus);
-            WateringFrequencyLabel.Text = $"Частота полива: раз в {watering} часа";
+            _watering = await _plantRepository.GetWateringFrequencyAsync(_genus);
+            WateringFrequencyLabel.Text = $"Р§Р°СЃС‚РѕС‚Р° РїРѕР»РёРІР°: СЂР°Р· РІ {_watering} С‡Р°СЃРѕРІ";
             WateringFrequencyLabel.IsVisible = true;
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Ошибка", $"Не удалось загрузить данные: {ex.Message}", "OK");
+            await DisplayAlert("РћС€РёР±РєР°", $"РќРµ СѓРґР°Р»РѕСЃСЊ Р·Р°РіСЂСѓР·РёС‚СЊ РґР°РЅРЅС‹Рµ: {ex.Message}", "OK");
             await Navigation.PopAsync();
         }
         finally
@@ -37,11 +46,36 @@ public partial class PlantInfoPage : ContentPage
 
     private async void OnAddPlantClicked(object sender, EventArgs e)
     {
-        if (watering == 0) return;
-        var id = Guid.NewGuid().ToString();
-        await PlantDB.SaveImage(image, id);
-        PlantDB.AddPlant(new Plant { Genus = genus, Id = id, Name = genus, Watering = watering, NeedToNotify = false });
-        await DisplayAlert("Успех", $"Добавлено в ваш список!", "OK");
-        Application.Current.MainPage = new NavigationPage(new MyPlantsPage());
+        try
+        {
+            if (_watering == 0) return;
+            AddButton.IsEnabled = false;
+            var id = Guid.NewGuid().ToString();
+            await _plantRepository.SaveImageAsync(_image, id);
+            
+            var plant = new Plant 
+            { 
+                Genus = _genus, 
+                Id = id, 
+                Name = _genus, 
+                Watering = _watering, 
+                NeedToNotify = false 
+            };
+            
+            await _plantRepository.AddPlantAsync(plant);
+            await DisplayAlert("РЈСЃРїРµС…", "Р”РѕР±Р°РІР»РµРЅРѕ РІ РІР°С€ СЃРїРёСЃРѕРє!", "OK");
+
+            await _navigationService.SetMainPageAsync<MyPlantsPage>();
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("РћС€РёР±РєР°", $"РќРµ СѓРґР°Р»РѕСЃСЊ РґРѕР±Р°РІРёС‚СЊ СЂР°СЃС‚РµРЅРёРµ: {ex.Message}", "OK");
+        }
+        finally
+        {
+            AddButton.IsEnabled = true;
+            LoadingIndicator.IsVisible = false;
+            LoadingIndicator.IsRunning = false;
+        }
     }
 }

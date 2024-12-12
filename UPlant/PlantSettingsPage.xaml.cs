@@ -1,52 +1,74 @@
 using Microsoft.Maui.Controls;
 using System;
 using System.IO;
+using UPlant.Domain.Interfaces;
+using UPlant.Domain.Models;
 
-namespace UPlant
+namespace UPlant;
+
+public partial class PlantSettingsPage : ContentPage
 {
-    public partial class PlantSettingsPage : ContentPage
+    private readonly Plant _plant;
+    private readonly IPlantRepository _plantRepository;
+    private bool _isUpdating = false;
+
+    public PlantSettingsPage(Plant plant, IPlantRepository plantRepository)
     {
-        private readonly Plant plant;
+        InitializeComponent();
+        _plant = plant;
+        _plantRepository = plantRepository;
+        BindingContext = _plant;
+    }
 
-        public PlantSettingsPage(Plant plant)
+    private async void OnSaveButtonClicked(object sender, EventArgs e)
+    {
+        string newPlantName = await DisplayPromptAsync("Р’РІРµРґРёС‚Рµ РЅРѕРІРѕРµ РёРјСЏ", "", "РћРє", "РћС‚РјРµРЅР°", "РќРѕРІРѕРµ РёРјСЏ", maxLength: 100, keyboard: Keyboard.Text);
+        if (!string.IsNullOrEmpty(newPlantName))
         {
-            InitializeComponent();
-            this.plant = plant;
-            BindingContext = this.plant;
-        }
-
-        private async void OnSaveButtonClicked(object sender, EventArgs e)
-        {
-            string newPlantName = await DisplayPromptAsync("Введите новое имя", "", "Ок", "Отмена", "Новое имя", maxLength: 100, keyboard: Keyboard.Text);
-            if (!string.IsNullOrEmpty(newPlantName))
+            if (newPlantName != _plant.Name)
             {
-                if (newPlantName != plant.Name)
-                {
-                    plant.UpdateName(newPlantName);
-                    PhotoTitleLabel.Text = plant.Name;
-                }
-                await DisplayAlert("Успешно!", "Имя изменено", "OK");
+                _plant.UpdateName(newPlantName);
+                await _plantRepository.UpdatePlantAsync(_plant);
+                PhotoTitleLabel.Text = _plant.Name;
             }
+            await DisplayAlert("Р“РѕС‚РѕРІРѕ!", "РРјСЏ РёР·РјРµРЅРµРЅРѕ", "OK");
         }
+    }
 
-        private async void OnDeleteButtonClicked(object sender, EventArgs e)
+    private async void OnDeleteButtonClicked(object sender, EventArgs e)
+    {
+        if (await DisplayActionSheet("Р’С‹ СѓРІРµСЂРµРЅС‹?", "РќРµС‚", "Р”Р°") == "Р”Р°")
         {
-            if (await DisplayActionSheet("Вы уверены?", "Нет", "Да") == "Да")
-            {
-                PlantDB.DeletePlant(plant);
-                await Navigation.PopAsync();
-            }
+            await _plantRepository.DeletePlantAsync(_plant);
+            await Navigation.PopAsync();
         }
+    }
 
-        private void OnNeedToNotifyToggled(object sender, ToggledEventArgs e)
-        {
-            plant.NeedToNotify = e.Value;
-            PlantDB.SavePlantData();
-        }
+    private async void OnNeedToNotifyToggled(object sender, ToggledEventArgs e)
+    {
+        _plant.UpdateNotification(e.Value);
+        await _plantRepository.UpdatePlantAsync(_plant);
+    }
 
-        private void OnWateringDragCompleted(object sender, EventArgs e)
+    private async void OnWateringValueChanged(object sender, ValueChangedEventArgs e)
+    {
+        if (_isUpdating) return;
+        _isUpdating = true;
+
+        try
         {
-            PlantDB.SavePlantData();
+            var roundedValue = (int)Math.Round(e.NewValue);
+            _plant.UpdateWatering(roundedValue);
         }
+        finally
+        {
+            await Task.Delay(50);
+            _isUpdating = false;
+        }
+    }
+
+    private async void OnWateringDragCompleted(object sender, EventArgs e)
+    {
+        await _plantRepository.UpdatePlantAsync(_plant);
     }
 }

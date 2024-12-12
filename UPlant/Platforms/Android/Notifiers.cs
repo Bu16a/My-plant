@@ -3,6 +3,7 @@ using Android.Content;
 using AndroidX.Core.App;
 using Firebase.Messaging;
 using Newtonsoft.Json;
+using UPlant.Domain.Interfaces;
 
 namespace UPlant;
 
@@ -10,10 +11,18 @@ namespace UPlant;
 [IntentFilter(new[] { "com.google.firebase.MESSAGING_EVENT" })]
 public class MyFirebaseMessagingService : FirebaseMessagingService
 {
+    private IFirebaseDatabase _database;
+
+    public override void OnCreate()
+    {
+        base.OnCreate();
+        _database = Microsoft.Maui.Controls.Application.Current.Handler.MauiContext.Services.GetService<IFirebaseDatabase>();
+    }
+
     public override async void OnMessageReceived(RemoteMessage message)
     {
-        var a = await FirebaseApi.ReadDatabaseAsync("received");
-        await FirebaseApi.WriteDatabaseAsync("received", a == "null" ? 1 : (int.Parse(a) + 1));
+        var a = await _database.ReadDatabaseAsync("received");
+        await _database.WriteDatabaseAsync("received", a == "null" ? 1 : (int.Parse(a) + 1));
 
         base.OnMessageReceived(message);
         var notification = message.GetNotification();
@@ -57,8 +66,12 @@ public class MyFirebaseMessagingService : FirebaseMessagingService
 [BroadcastReceiver(Name = "uplant.NotificationActionReceiver")]
 public class NotificationActionReceiver : BroadcastReceiver
 {
+    private IFirebaseDatabase _database;
+
     public override async void OnReceive(Context context, Intent intent)
     {
+        _database = Microsoft.Maui.Controls.Application.Current.Handler.MauiContext.Services.GetService<IFirebaseDatabase>();
+
         var action = intent.GetStringExtra("action");
         var notificationId = intent.GetIntExtra("notificationId", -1);
         if (notificationId != -1)
@@ -69,8 +82,8 @@ public class NotificationActionReceiver : BroadcastReceiver
 
         if (action == "watered")
         {
-            var a = await FirebaseApi.ReadDatabaseAsync("watered");
-            await FirebaseApi.WriteDatabaseAsync("watered", a == "null" ? 1 : (int.Parse(a) + 1));
+            var a = await _database.ReadDatabaseAsync("watered");
+            await _database.WriteDatabaseAsync("watered", a == "null" ? 1 : (int.Parse(a) + 1));
         }
     }
 }

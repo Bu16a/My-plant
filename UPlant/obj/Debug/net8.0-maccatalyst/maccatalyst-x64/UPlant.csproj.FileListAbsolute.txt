@@ -306,3 +306,14 @@ C:\weplant\UPlant\UPlant\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\ref\UPlant
 C:\weplant\UPlant\UPlant\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\Microsoft.Maui.Controls.HotReload.Forms.dll
 C:\weplant\UPlant\UPlant\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\Microsoft.VisualStudio.DesignTools.MobileTapContracts.dll
 C:\weplant\UPlant\UPlant\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\Microsoft.VisualStudio.DesignTools.TapContract.dll
+C:\weplant\UPlant\UPlant\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\NUnit3.TestAdapter.dll
+C:\weplant\UPlant\UPlant\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\NUnit3.TestAdapter.pdb
+C:\weplant\UPlant\UPlant\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\nunit.engine.dll
+C:\weplant\UPlant\UPlant\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\nunit.engine.api.dll
+C:\weplant\UPlant\UPlant\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\nunit.engine.core.dll
+C:\weplant\UPlant\UPlant\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\testcentric.engine.metadata.dll
+C:\weplant\UPlant\UPlant\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\Castle.Core.dll
+C:\weplant\UPlant\UPlant\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\Moq.dll
+C:\weplant\UPlant\UPlant\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\nunit.framework.dll
+C:\weplant\UPlant\UPlant\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\nunit.framework.legacy.dll
+C:\weplant\UPlant\UPlant\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\System.Diagnostics.EventLog.dll

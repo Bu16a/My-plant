@@ -1,14 +1,22 @@
 using System.Collections.ObjectModel;
+using UPlant.Domain.Interfaces;
 
 namespace UPlant;
+
 public partial class ChoosePlantPage : ContentPage
 {
+    private readonly IPlantRepository _plantRepository;
+    private readonly IServiceProvider _serviceProvider;
+    private readonly INavigationService _navigationService;
     public ObservableCollection<string> Items { get; set; } = new();
-    private FileResult image;
+    private readonly FileResult _image;
 
-    public ChoosePlantPage(FileResult image)
+    public ChoosePlantPage(FileResult image, IPlantRepository plantRepository, IServiceProvider serviceProvider, INavigationService navigationService)
     {
-        this.image = image;
+        _image = image;
+        _plantRepository = plantRepository;
+        _serviceProvider = serviceProvider;
+        _navigationService = navigationService;
         InitializeComponent();
         BindingContext = this;
         LoadDataAsync();
@@ -18,10 +26,13 @@ public partial class ChoosePlantPage : ContentPage
     {
         try
         {
-            var items = await PlantDB.GetPossiblePlantsAsync(image);
+            LoadingIndicator.IsVisible = true;
+            ResultListView.IsVisible = false;
+
+            var items = await _plantRepository.GetPossiblePlantsAsync(_image, maxAttempts: 3);
             if (items == null || items.Count == 0)
             {
-                await DisplayAlert("Ошибка", $"На фото растений не найдено", "OK");
+                await DisplayAlert("РћС€РёР±РєР°", "РќРё РѕРґРЅРѕ СЂР°СЃС‚РµРЅРёРµ РЅРµ РЅР°Р№РґРµРЅРѕ", "OK");
                 await Navigation.PopAsync();
             }
             else
@@ -30,9 +41,9 @@ public partial class ChoosePlantPage : ContentPage
                     Items.Add(item);
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            await DisplayAlert("Ошибка", $"Ошибка распознавания. Попробуйте позже", "OK");
+            await DisplayAlert("РћС€РёР±РєР°", "РќРµ СѓРґР°Р»РѕСЃСЊ СЂР°СЃРїРѕР·РЅР°С‚СЊ СЂР°СЃС‚РµРЅРёРµ", "OK");
             await Navigation.PopAsync();
         }
         finally
@@ -47,7 +58,7 @@ public partial class ChoosePlantPage : ContentPage
     {
         if (e.SelectedItem is string selectedItem)
         {
-            await Navigation.PushAsync(new PlantInfoPage(selectedItem, image));
+            await _navigationService.NavigateToAsync<PlantInfoPage>(selectedItem, _image, _plantRepository, _serviceProvider, _navigationService);
             ((ListView)sender).SelectedItem = null;
         }
     }

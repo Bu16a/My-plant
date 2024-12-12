@@ -2,14 +2,22 @@
 using Microsoft.Maui.Controls;
 using System;
 using System.Threading.Tasks;
+using UPlant.Domain.Interfaces;
 
 namespace UPlant;
 
 public partial class MainPage : ContentPage
 {
-    public MainPage()
+    private readonly IServiceProvider _serviceProvider;
+    private readonly IAuthService _authService;
+    private readonly INavigationService _navigationService;
+
+    public MainPage(IServiceProvider serviceProvider, IAuthService authService, INavigationService navigationService)
     {
         InitializeComponent();
+        _serviceProvider = serviceProvider;
+        _authService = authService;
+        _navigationService = navigationService;
     }
 
     private async void OnTakePhotoClicked(object sender, EventArgs e)
@@ -18,7 +26,7 @@ public partial class MainPage : ContentPage
         {
             var photo = await MediaPicker.CapturePhotoAsync();
             if (photo != null)
-                await Navigation.PushAsync(new ChoosePlantPage(photo));
+                await _navigationService.NavigateToAsync<ChoosePlantPage>(photo);
         }
         catch (Exception ex)
         {
@@ -28,10 +36,14 @@ public partial class MainPage : ContentPage
 
     private async void OnMyPlantsClicked(object sender, EventArgs e)
     {
-        Application.Current.MainPage = new NavigationPage(new MyPlantsPage());
+        await _navigationService.SetMainPageAsync<MyPlantsPage>();
     }
 
     private void OnPhotosClicked(object sender, EventArgs e) { }
 
-    private async void OnLogoutClicked(object sender, EventArgs e) => await FirebaseApi.Logout();
+    private async void OnLogoutClicked(object sender, EventArgs e)
+    {
+        await _authService.LogoutAsync();
+        await _navigationService.SetMainPageAsync<RegisterPage>();
+    }
 }

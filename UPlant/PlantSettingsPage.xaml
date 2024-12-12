@@ -36,7 +36,11 @@
         <!-- Измерение Watering -->
         <Label Text="Частота полива (часы)" FontSize="18" HorizontalOptions="Center"/>
         <Slider Minimum="12" Maximum="240"
-                Value="{Binding Watering}"
+                Value="{Binding Watering, Mode=TwoWay}"
+                MinimumTrackColor="{StaticResource Primary}"
+                MaximumTrackColor="{StaticResource Gray300}"
+                ThumbColor="{StaticResource Primary}"
+                ValueChanged="OnWateringValueChanged"
                 DragCompleted="OnWateringDragCompleted"/>
         <Label Text="{Binding Watering, StringFormat='Каждые {0} часа(-ов)'}" 
                FontSize="16" 

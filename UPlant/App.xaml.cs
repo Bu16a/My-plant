@@ -1,23 +1,26 @@
 ﻿using Plugin.Firebase.Auth;
 using System.Net;
+using UPlant.Domain.Interfaces;
 
 namespace UPlant
 {
     public partial class App : Application
     {
-        public App()
+        private readonly IAuthService _authService;
+        private readonly INavigationService _navigationService;
+
+        public App(IAuthService authService, INavigationService navigationService)
         {
             InitializeComponent();
+            _authService = authService;
+            _navigationService = navigationService;
 
             Connectivity.ConnectivityChanged += OnConnectivityChanged;
 
-            if (CrossFirebaseAuth.Current.CurrentUser == null)
-                MainPage = new RegisterPage();
+            if (!_authService.IsAuthenticated)
+                _navigationService.SetMainPageAsync<RegisterPage>().Wait();
             else
-            {
-                PlantDB.LoadPlantData();
-                MainPage = new NavigationPage(new MainPage());
-            }
+                _navigationService.SetMainPageAsync<MainPage>().Wait();
         }
 
         //protected override void OnStart()
