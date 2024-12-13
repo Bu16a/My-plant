@@ -1,4 +1,3 @@
-import logging
 import g4f
 from g4f.client import Client
 import google.generativeai as genai
@@ -22,7 +21,7 @@ class AIModelHandler:
                 if response:
                     return response.choices[0].message.content
             except Exception as e:
-                logging.info(f"Attempt {attempt + 1} with g4f failed: {e}")
+                print(f"Attempt {attempt + 1} with g4f failed: {e}")
         return "Failed to get a response from g4f after several attempts."
 
     @staticmethod
@@ -38,7 +37,7 @@ class AIModelHandler:
             generate_time = time.time() - start_generate
 
             total_time = time.time() - start_time
-            logging.info(f"Upload time: {upload_time}s, Generate time: {generate_time}s, Total time: {total_time}s")
+            print(f"Upload time: {upload_time}s, Generate time: {generate_time}s, Total time: {total_time}s")
 
             return result.text if hasattr(result, "text") else "Image analysis failed or contains no text."
         except Exception as e:

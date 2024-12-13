@@ -1,4 +1,3 @@
-import logging
 import os
 import tempfile
 import asyncio
@@ -41,7 +40,7 @@ class FileHandler:
             return web.json_response({"message": f"File saved successfully as {save_path}"})
 
         except Exception as e:
-            logging.error(f"Ошибка в save_image_with_id: {e}")
+            print(f"Error in save_image_with_id: {e}")
             return web.json_response({"error": f"Error saving file: {e}"}, status=500)
 
     async def get_image_by_id(self, request: Request) -> web.Response:
