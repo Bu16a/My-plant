@@ -79,7 +79,7 @@ def check_and_send_notifications():
             freq = plant_data["Watering"]  # Интервал в строковом формате HH:MM:SS
 
             # Преобразуем интервал в timedelta
-            interval_timedelta = timedelta(seconds=int(freq))
+            interval_timedelta = timedelta(hours=int(freq))
 
             # Преобразуем время последнего уведомления
             last_watering_datetime = datetime.fromisoformat(last_watering)
@@ -100,11 +100,11 @@ def update_last_notification(plant_data, today, user_id, ind):
 
 
 if __name__ == "__main__":
-    # print(get_object_from_db("Users"))
-    schedule.every(5).minutes.do(check_and_send_notifications)
-
-    print("Планировщик запущен. Ожидание заданий...")
-
-    while True:
-        schedule.run_pending()
-        time.sleep(150)
+    print(get_object_from_db("Users"))
+    # schedule.every(5).minutes.do(check_and_send_notifications)
+    #
+    # print("Планировщик запущен. Ожидание заданий...")
+    #
+    # while True:
+    #     schedule.run_pending()
+    #     time.sleep(150)
