@@ -1,1 +1,0 @@
-C:\weplant\UPlant\UPlant\UPlant.csproj;x64
