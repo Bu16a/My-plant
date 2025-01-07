@@ -1,42 +1,147 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="UPlant.MainPage"
-             Title="Главное меню">
-    <Grid RowDefinitions="Auto, *, Auto">
-        <Button Text="Выйти из аккаунта" 
-                FontSize="18"
-                Margin="10"
-                HorizontalOptions="End"
-                Clicked="OnLogoutClicked"
-                Grid.Row="0"/>
+             Title="Поиск"
+             BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}"
+             NavigationPage.HasNavigationBar="False">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="PrimaryBackgroundColor">White</Color>
+            <Color x:Key="SecondaryBackgroundColor">#1C1C1E</Color>
+            <Color x:Key="PrimaryTextColor">Black</Color>
+            <Color x:Key="SecondaryTextColor">White</Color>
+            <Color x:Key="LightGreenBackground">#E8F5E9</Color>
+            <Color x:Key="DarkGreenBackground">#1B5E20</Color>
+            <Color x:Key="LightGreenBackgroundActive">#C8E6C9</Color>
+            <Color x:Key="DarkGreenBackgroundActive">#154C19</Color>
+            <Color x:Key="DarkPageBackground">#35513E</Color>
+            <Style x:Key="NavigationButtonStyle" TargetType="ContentView">
+                <Setter Property="BackgroundColor" Value="White"/>
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup Name="CommonStates">
+                            <VisualState Name="Normal" />
+                            <VisualState Name="Pressed">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="#f0f0f0" />
+                                    <Setter Property="Opacity" Value="0.8" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
-        <Button Text="Сделать фото" 
-                FontSize="24"
-                Padding="20"
-                VerticalOptions="Center"
-                HorizontalOptions="Center"
-                Grid.Row="1"
-                Clicked="OnTakePhotoClicked"
-                WidthRequest="300"
-                HeightRequest="300"/>
+    <Grid RowDefinitions="Auto, *, Auto"
+          BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}">
+        
+        <!-- Заголовок -->
+        <Grid Grid.Row="0" 
+              BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}"
+              HeightRequest="50"
+              ColumnDefinitions="*, Auto">
+            
+            <Label Text="Поиск"
+                   Grid.Column="0"
+                   FontSize="22"
+                   Margin="20,15,0,0"
+                   HorizontalOptions="Start"
+                   VerticalOptions="Center"
+                   TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"/>
+            
+            <ImageButton Grid.Column="1"
+                        Source="exit2.png"
+                        HeightRequest="35"
+                        WidthRequest="35"
+                        Margin="0,20,25,0"
+                        BackgroundColor="Transparent"
+                        Clicked="OnLogoutClicked"/>
+        </Grid>
+        
+        <!-- Основной контент -->
+        <Grid Grid.Row="1">
+            <Border BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}"
+                    StrokeShape="RoundRectangle 20"
+                    Stroke="{AppThemeBinding Light=Black, Dark=White}"
+                    Padding="30"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    HeightRequest="270"
+                    WidthRequest="270">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnTakePhotoClicked"/>
+                </Border.GestureRecognizers>
+                <Image Source="camera2.png"
+                       HeightRequest="250"
+                       WidthRequest="250"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
+            </Border>
+        </Grid>
 
-        <Grid Grid.Row="2" Padding="10,0,10,10" HorizontalOptions="FillAndExpand">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <!-- Нижняя панель навигации -->
+        <Grid Grid.Row="2"
+              Padding="15,5,15,15"
+              Margin="0,0,0,10"
+              ColumnDefinitions="*, *"
+              ColumnSpacing="10"
+              HeightRequest="90">
+            
+            <!-- Кнопка "Мои растения" -->
+            <ContentView Grid.Column="0" 
+                        HorizontalOptions="Center">
+                <Border Padding="8"
+                        Stroke="{AppThemeBinding Light=Black, Dark=White}"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 10"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}"
+                        HeightRequest="70"
+                        WidthRequest="150">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnMyPlantsClicked"/>
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="3">
+                        <Image Source="plant2.png"
+                               HeightRequest="32"
+                               WidthRequest="32"
+                               HorizontalOptions="Center" />
+                        <Label Text="Мои растения"
+                               HorizontalOptions="Center"
+                               FontSize="12"
+                               TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}" />
+                    </VerticalStackLayout>
+                </Border>
+            </ContentView>
 
-            <Button Text="Мои растения" 
-                    Grid.Column="0" 
-                    Clicked="OnMyPlantsClicked"
-                    Margin="2"/>
-            <Button Text="Фото" 
-                    TextColor="Black"
-                    Grid.Column="1" 
-                    Clicked="OnPhotosClicked"
-                    Margin="2"
-                    BackgroundColor="LightBlue"/>
+            <!-- Кнопка "Поиск" -->
+            <ContentView Grid.Column="1" 
+                        HorizontalOptions="Center">
+                <Border Padding="8"
+                        Stroke="{AppThemeBinding Light=Black, Dark=White}"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 10"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackgroundActive}, Dark={StaticResource DarkGreenBackgroundActive}}"
+                        HeightRequest="70"
+                        WidthRequest="150">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnPhotosClicked"/>
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="3">
+                        <Image Source="zoom2.png"
+                               HeightRequest="32"
+                               WidthRequest="32"
+                               HorizontalOptions="Center" />
+                        <Label Text="Поиск"
+                               HorizontalOptions="Center"
+                               FontSize="12"
+                               TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}" />
+                    </VerticalStackLayout>
+                </Border>
+            </ContentView>
         </Grid>
     </Grid>
 </ContentPage>

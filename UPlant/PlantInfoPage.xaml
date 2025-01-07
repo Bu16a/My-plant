@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="UPlant.PlantInfoPage"
-             Title="Информация">
+             Title="Информация о растении"
+             BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}">
     <StackLayout Padding="10" Spacing="20">
         <Label x:Name="PlantNameLabel"
                Text="Название растения"

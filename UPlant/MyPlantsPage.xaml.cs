@@ -56,9 +56,12 @@ public partial class MyPlantsPage : ContentPage
         }
     }
 
-    private void OnMyPlantsClicked(object sender, EventArgs e) { }
+    private async void OnMyPlantsClicked(object sender, TappedEventArgs e)
+    {
+        // Already on MyPlants page, no need to navigate
+    }
 
-    private async void OnPhotosClicked(object sender, EventArgs e)
+    private async void OnPhotosClicked(object sender, TappedEventArgs e)
     {
         await _navigationService.SetMainPageAsync<MainPage>();
     }

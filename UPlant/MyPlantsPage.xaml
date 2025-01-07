@@ -2,10 +2,31 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="UPlant.MyPlantsPage"
-             Title="Мои растения">
+             Title="Мои растения"
+             BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}"
+             NavigationPage.HasNavigationBar="False">
+    <Grid RowDefinitions="Auto, *, Auto">
+        <!-- Заголовок -->
+        <Grid Grid.Row="0" 
+              BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}"
+              HeightRequest="50"
+              ColumnDefinitions="*">
+            
+            <Label Text="Мои растения"
+                   Grid.Column="0"
+                   FontSize="22"
+                   Margin="20,15,0,0"
+                   HorizontalOptions="Start"
+                   VerticalOptions="Center"
+                   TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"/>
+        </Grid>
 
-    <Grid RowDefinitions="*, Auto">
-        <CollectionView x:Name="PhotoCollectionView" SelectionMode="Single" SelectionChanged="OnPlantSelected">
+        <!-- Список растений -->
+        <CollectionView Grid.Row="1" 
+                       x:Name="PhotoCollectionView" 
+                       SelectionMode="Single" 
+                       SelectionChanged="OnPlantSelected"
+                       Margin="0,15,0,0">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <StackLayout Orientation="Horizontal" Padding="10">
@@ -15,7 +36,7 @@
                                WidthRequest="150" />
                         <Grid>
                             <ActivityIndicator IsRunning="{Binding IsImageLoading}"
-                                               IsVisible="{Binding IsImageLoading}" />
+                                             IsVisible="{Binding IsImageLoading}" />
                             <Image Source="{Binding ImagePath}"
                                    Aspect="AspectFill"
                                    HeightRequest="100"
@@ -27,22 +48,59 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <Grid Grid.Row="1" Padding="10,0,10,10" HorizontalOptions="FillAndExpand">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <!-- Нижняя панель навигации -->
+        <Grid Grid.Row="2"
+              Padding="15,5,15,15"
+              Margin="0,0,0,10"
+              ColumnDefinitions="*, *"
+              ColumnSpacing="10"
+              HeightRequest="90">
+            
+            <!-- Кнопка "Мои растения" (активная) -->
+            <Border Grid.Column="0"
+                    Padding="8"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackgroundActive}, Dark={StaticResource DarkPageBackground}}"
+                    StrokeShape="RoundRectangle 10"
+                    HorizontalOptions="Center"
+                    HeightRequest="70"
+                    WidthRequest="150">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnMyPlantsClicked"/>
+                </Border.GestureRecognizers>
+                <VerticalStackLayout Spacing="3">
+                    <Image Source="plant2.png"
+                           HeightRequest="32"
+                           WidthRequest="32"
+                           HorizontalOptions="Center" />
+                    <Label Text="Мои растения"
+                           HorizontalOptions="Center"
+                           FontSize="12"
+                           TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}" />
+                </VerticalStackLayout>
+            </Border>
 
-            <Button Text="Мои растения" 
-                    TextColor="Black"
-                    Grid.Column="0" 
-                    Clicked="OnMyPlantsClicked"
-                    Margin="2"
-                    BackgroundColor="LightBlue"/>
-            <Button Text="Фото" 
-                    Grid.Column="1" 
-                    Clicked="OnPhotosClicked"
-                    Margin="2"/>
+            <!-- Кнопка "Поиск" (неактивная) -->
+            <Border Grid.Column="1"
+                    Padding="8"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}"
+                    StrokeShape="RoundRectangle 10"
+                    HorizontalOptions="Center"
+                    HeightRequest="70"
+                    WidthRequest="150">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnPhotosClicked"/>
+                </Border.GestureRecognizers>
+                <VerticalStackLayout Spacing="3">
+                    <Image Source="zoom2.png"
+                           HeightRequest="32"
+                           WidthRequest="32"
+                           HorizontalOptions="Center" />
+                    <Label Text="Поиск"
+                           HorizontalOptions="Center"
+                           FontSize="12"
+                           TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}" />
+                </VerticalStackLayout>
+            </Border>
         </Grid>
     </Grid>
 </ContentPage>

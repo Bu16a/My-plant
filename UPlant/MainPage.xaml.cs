@@ -1,8 +1,4 @@
-﻿using Microsoft.Maui.ApplicationModel;
-using Microsoft.Maui.Controls;
-using System;
-using System.Threading.Tasks;
-using UPlant.Domain.Interfaces;
+﻿using UPlant.Domain.Interfaces;
 
 namespace UPlant;
 
