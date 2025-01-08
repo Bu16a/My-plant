@@ -1,3 +1,5 @@
+import json
+
 from aiohttp import web
 from aiohttp.web_request import Request
 from aiohttp.web_response import Response
@@ -15,7 +17,7 @@ class AsyncServer:
     def __init__(self) -> None:
         self.app: web.Application = web.Application()
         self.model_handler: AIModelHandler = AIModelHandler()
-        self.file_handler : FileHandler = FileHandler()
+        self.file_handler: FileHandler = FileHandler()
         self.setup_routes()
 
     def setup_routes(self) -> None:
@@ -27,10 +29,47 @@ class AsyncServer:
         self.app.router.add_post("/save-image-with-id", self.file_handler.save_image_with_id)
         self.app.router.add_post("/get-image-by-id", self.file_handler.get_image_by_id)
         self.app.router.add_post('/get_gz', self.get_gz)
+        self.app.router.add_post('/get-first-image_url', self.get_first_image_url)
+        self.app.router.add_post("/get_info", self.get_info)
+        self.app.router.add_post("/get-first-image", self.get_first_image)
 
     @staticmethod
     async def root(request: Request) -> Response:
         return web.json_response({"message": "Async aiohttp server is running"})
+
+    async def get_first_image_url(self, request: Request) -> Response:
+        try:
+            data: dict = await request.json()
+            query: str = data.get("query")
+            if not query:
+                return web.json_response({"error": "Parameter 'query' is required"}, status=400)
+
+            image_url: str = self.model_handler.get_first_image_google(query)
+            if not image_url:
+                return web.json_response({"error": "No image found for the query"}, status=404)
+
+            return web.json_response({"image_url": image_url})
+
+        except Exception as e:
+            return web.json_response({"error": f"Error processing request: {e}"}, status=500)
+
+    async def get_first_image(self, request: Request) -> Response:
+        try:
+            data: dict = await request.json()
+            query: str = data.get("query")
+            if not query:
+                return web.json_response({"error": "Parameter 'query' is required"}, status=400)
+            image_url: str = self.model_handler.get_first_image_google(query)
+            if not image_url:
+                return web.json_response({"error": "No image found for the query"}, status=404)
+            response = requests.get(image_url, stream=True)
+            if response.status_code != 200:
+                return web.json_response({"error": "Failed to download the image"}, status=400)
+            content_type = response.headers.get("Content-Type", "application/octet-stream")
+            return Response(body=response.content, content_type=content_type)
+
+        except Exception as e:
+            return web.json_response({"error": f"Error processing request: {e}"}, status=500)
 
     async def gpt_query_g4f(self, request: Request) -> Response:
         try:
@@ -73,6 +112,50 @@ class AsyncServer:
 
             result: str = self.model_handler.get_text_response(user_query)
             return web.json_response({"result": result})
+
+        except Exception as e:
+            return web.json_response({"error": f"Error processing request: {e}"}, status=500)
+
+    async def get_info(self, request: Request) -> Response:
+        try:
+            # Получаем данные из запроса
+            data: dict = await request.json()
+            plant_name: str = data.get("query")
+            if not plant_name:
+                return web.json_response({"error": "Query parameter is required"}, status=400)
+
+            # Формируем запрос для модели
+            prompt = (
+                f"Предоставь информацию о растении {plant_name}. "
+                "Ответ в формате валидного JSON. Пример: "
+                '{"Частота полива (раз в неделю)": 2, "Объём горшка (л)": 5, "Сколько воды нужно в одном поливе (л)": 1.5, '
+                '"Освещение": "Яркий рассеянный свет", "Температура (°C)": 20, "Влажность воздуха (%)": 50, '
+                '"Подкормка (раз в месяц)": 1}. Только JSON, ничего лишнего.'
+            )
+
+            # Получаем результат через AIModelHandler
+            result: str = self.model_handler.get_text_response(prompt)
+
+            # Логирование результата
+            print(f"Raw model response: {result}")
+
+            # Проверяем пустой ответ
+            if not result.strip():
+                return web.json_response({"error": "Model returned an empty response"}, status=500)
+
+            # Удаляем обратные кавычки и исправляем текст регуляркой
+            cleaned_result = re.sub(r"```(?:json)?\n(.*)\n```", r"\1", result, flags=re.DOTALL)
+
+            # Преобразуем результат в JSON
+            try:
+                plant_info = json.loads(cleaned_result)
+                if not isinstance(plant_info, dict):
+                    raise ValueError("Response is not a valid JSON object")
+            except json.JSONDecodeError as e:
+                return web.json_response({"error": f"Failed to parse model response: {e}"}, status=500)
+
+            # Возвращаем результат
+            return web.json_response(plant_info)
 
         except Exception as e:
             return web.json_response({"error": f"Error processing request: {e}"}, status=500)

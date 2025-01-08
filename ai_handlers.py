@@ -4,11 +4,15 @@ import google.generativeai as genai
 import os
 from dotenv import load_dotenv
 import time
+import requests
+
 
 class AIModelHandler:
     def __init__(self):
         load_dotenv()
         genai.configure(api_key=os.getenv("API_KEY"))
+        self.cx = os.getenv("MY_CX")
+        self.api_search = os.getenv("MY_SEARCH_API_KEY")
         self.client = Client()
 
     async def get_gpt_response_g4f(self, user_query: str, model: g4f.models.default = g4f.models.default) -> str:
@@ -51,3 +55,26 @@ class AIModelHandler:
             return result.text if hasattr(result, "text") else "The model's response contains no text."
         except Exception as e:
             return f"An error occurred while processing the text request: {e}"
+
+    def get_first_image_google(self, query):
+        # URL для Google Custom Search API
+        search_url = "https://www.googleapis.com/customsearch/v1"
+        params = {
+            "q": query,
+            "cx": self.cx,
+            "key": self.api_search,
+            "searchType": "image",
+            "num": 1,
+        }
+
+        response = requests.get(search_url, params=params)
+        if response.status_code != 200:
+            print(f"Ошибка при запросе к API: {response.status_code}")
+            return None
+
+        data = response.json()
+        if "items" in data and len(data["items"]) > 0:
+            return data["items"][0]["link"]
+        else:
+            print("Картинка не найдена")
+            return None

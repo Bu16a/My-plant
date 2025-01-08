@@ -8,3 +8,5 @@ class AppContainer(containers.DeclarativeContainer):
     ai_model_handler = providers.Singleton(AIModelHandler)
     file_handler = providers.Singleton(FileHandler)
     async_server = providers.Factory(AsyncServer)
+
+
