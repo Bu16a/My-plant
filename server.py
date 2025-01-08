@@ -130,7 +130,7 @@ class AsyncServer:
                 "Ответ в формате валидного JSON. Пример: "
                 '{"Частота полива (раз в неделю)": 2, "Объём горшка (л)": 5, "Сколько воды нужно в одном поливе (л)": 1.5, '
                 '"Освещение": "Яркий рассеянный свет", "Температура (°C)": 20, "Влажность воздуха (%)": 50, '
-                '"Подкормка (раз в месяц)": 1}. Только JSON, ничего лишнего.'
+                '"Подкормка (раз в месяц)": 1, "Интерсный факт" : "Данное растение вывели в Великобритании".}. Только JSON, ничего лишнего.'
             )
 
             # Получаем результат через AIModelHandler
@@ -139,12 +139,12 @@ class AsyncServer:
             # Логирование результата
             print(f"Raw model response: {result}")
 
-            # Проверяем пустой ответ
+            # Проверяем пустой результат
             if not result.strip():
                 return web.json_response({"error": "Model returned an empty response"}, status=500)
 
-            # Удаляем обратные кавычки и исправляем текст регуляркой
-            cleaned_result = re.sub(r"```(?:json)?\n(.*)\n```", r"\1", result, flags=re.DOTALL)
+            # Удаляем лишние обратные кавычки и форматируем JSON
+            cleaned_result = re.sub(r"```(?:json)?\n(.*)\n```", r"\1", result, flags=re.DOTALL).strip()
 
             # Преобразуем результат в JSON
             try:
@@ -152,6 +152,9 @@ class AsyncServer:
                 if not isinstance(plant_info, dict):
                     raise ValueError("Response is not a valid JSON object")
             except json.JSONDecodeError as e:
+                # Логирование для отладки
+                print(f"JSON parsing error: {e}")
+                print(f"Cleaned result: {cleaned_result}")
                 return web.json_response({"error": f"Failed to parse model response: {e}"}, status=500)
 
             # Возвращаем результат
