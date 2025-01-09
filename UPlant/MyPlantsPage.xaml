@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:UPlant"
              x:Class="UPlant.MyPlantsPage"
              Title="Мои растения"
              BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}"
@@ -24,26 +25,48 @@
         <!-- Список растений -->
         <CollectionView Grid.Row="1" 
                        x:Name="PhotoCollectionView" 
-                       SelectionMode="Single" 
-                       SelectionChanged="OnPlantSelected"
+                       SelectionMode="None"
                        Margin="0,15,0,0">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <StackLayout Orientation="Horizontal" Padding="10">
-                        <Label Text="{Binding Name}" 
-                               FontSize="18"
-                               VerticalOptions="Center"
-                               WidthRequest="150" />
-                        <Grid>
-                            <ActivityIndicator IsRunning="{Binding IsImageLoading}"
-                                             IsVisible="{Binding IsImageLoading}" />
-                            <Image Source="{Binding ImagePath}"
-                                   Aspect="AspectFill"
-                                   HeightRequest="100"
-                                   WidthRequest="100"
-                                   IsVisible="{Binding IsImageLoaded}" />
+                    <Border Margin="10,5"
+                            Padding="10"
+                            Stroke="{AppThemeBinding Light=Black, Dark=White}"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 10">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:MyPlantsPage}}, Path=PlantSelectedCommand}"
+                                CommandParameter="{Binding .}"/>
+                        </Border.GestureRecognizers>
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <!-- Номер растения -->
+                            <Label Grid.Column="0"
+                                   Text="{Binding Index, StringFormat='{0}.'}"
+                                   FontSize="18"
+                                   VerticalOptions="Center"
+                                   Margin="0,0,20,0"
+                                   TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}" />
+                            
+                            <!-- Название растения -->
+                            <Label Grid.Column="1" 
+                                   Text="{Binding Name}" 
+                                   FontSize="18"
+                                   VerticalOptions="Center"
+                                   TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}" />
+                            
+                            <!-- Фото растения -->
+                            <Grid Grid.Column="2">
+                                <ActivityIndicator IsRunning="{Binding IsImageLoading}"
+                                                 IsVisible="{Binding IsImageLoading}" />
+                                <Image Source="{Binding ImagePath}"
+                                       Aspect="AspectFill"
+                                       HeightRequest="100"
+                                       WidthRequest="100"
+                                       IsVisible="{Binding IsImageLoaded}" />
+                            </Grid>
                         </Grid>
-                    </StackLayout>
+                    </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
@@ -59,7 +82,9 @@
             <!-- Кнопка "Мои растения" (активная) -->
             <Border Grid.Column="0"
                     Padding="8"
-                    BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackgroundActive}, Dark={StaticResource DarkPageBackground}}"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackgroundActive}, Dark={StaticResource DarkGreenBackgroundActive}}"
+                    Stroke="{AppThemeBinding Light=Black, Dark=White}"
+                    StrokeThickness="1"
                     StrokeShape="RoundRectangle 10"
                     HorizontalOptions="Center"
                     HeightRequest="70"
@@ -83,6 +108,8 @@
             <Border Grid.Column="1"
                     Padding="8"
                     BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}"
+                    Stroke="{AppThemeBinding Light=Black, Dark=White}"
+                    StrokeThickness="1"
                     StrokeShape="RoundRectangle 10"
                     HorizontalOptions="Center"
                     HeightRequest="70"

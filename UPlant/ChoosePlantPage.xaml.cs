@@ -67,6 +67,11 @@ public partial class ChoosePlantPage : ContentPage
             ((CollectionView)sender).SelectedItem = null;
         }
     }
+
+    private async void OnBackButtonClicked(object sender, EventArgs e)
+    {
+        await Navigation.PopAsync();
+    }
 }
 
 public class PlantSearchResult : INotifyPropertyChanged

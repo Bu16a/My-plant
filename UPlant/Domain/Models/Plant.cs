@@ -30,6 +30,18 @@ public class Plant : INotifyPropertyChanged
     [JsonPropertyName("is_notify")]
     public bool NeedToNotify { get; set; }
 
+    private int index;
+    [JsonIgnore]
+    public int Index 
+    { 
+        get => index;
+        set
+        {
+            index = value;
+            OnPropertyChanged();
+        }
+    }
+
     private bool isImageLoading = true;
     private bool isImageLoaded = false;
     private string imagePath;

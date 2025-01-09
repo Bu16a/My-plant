@@ -1,5 +1,6 @@
 using Microsoft.Maui.Controls;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 using UPlant.Domain.Interfaces;
 using UPlant.Domain.Models;
 
@@ -11,6 +12,8 @@ public partial class MyPlantsPage : ContentPage
     private readonly INavigationService _navigationService;
 
     public ObservableCollection<Plant> Plants { get; set; } = new();
+    
+    public ICommand PlantSelectedCommand { get; private set; }
 
     public MyPlantsPage(IPlantRepository plantRepository, INavigationService navigationService)
     {
@@ -18,6 +21,14 @@ public partial class MyPlantsPage : ContentPage
         _navigationService = navigationService;
         InitializeComponent();
         BindingContext = this;
+        
+        PlantSelectedCommand = new Command<Plant>(async (plant) =>
+        {
+            if (plant != null)
+            {
+                await Navigation.PushAsync(new PlantSettingsPage(plant, _plantRepository));
+            }
+        });
     }
 
     protected override async void OnAppearing()
@@ -31,21 +42,13 @@ public partial class MyPlantsPage : ContentPage
     {
         Plants.Clear();
         var plants = await _plantRepository.GetAllPlantsAsync();
+        var index = 1;
 
         foreach (var plant in plants)
         {
+            plant.Index = index++;
             Plants.Add(plant);
             _ = Task.Run(async () => plant.SetImagePath(await _plantRepository.GetImagePathAsync(plant.Id)));
-        }
-    }
-
-    private async void OnPlantSelected(object sender, SelectionChangedEventArgs e)
-    {
-        if (e.CurrentSelection.Count > 0)
-        {
-            var selectedPlant = e.CurrentSelection[0] as Plant;
-            await Navigation.PushAsync(new PlantSettingsPage(selectedPlant, _plantRepository));
-            ((CollectionView)sender).SelectedItem = null;
         }
     }
 

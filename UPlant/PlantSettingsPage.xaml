@@ -3,56 +3,116 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="UPlant.PlantSettingsPage"
              Title="Настройки растения"
-             BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}">
-    <StackLayout Padding="20" Spacing="15">
-        <!-- Название растения -->
-        <Label x:Name="PhotoTitleLabel"
-               Text="{Binding Name}"
-               FontSize="20"
-               HorizontalOptions="Center"
-               Margin="0,0,0,10"/>
+             BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}"
+             NavigationPage.HasNavigationBar="False">
+    <Grid RowDefinitions="Auto,*">
+        <!-- Заголовок -->
+        <Grid Grid.Row="0" 
+              BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}"
+              HeightRequest="50"
+              ColumnDefinitions="Auto,*">
+            
+            <ImageButton Grid.Column="0"
+                        Source="back.png"
+                        HeightRequest="32"
+                        WidthRequest="32"
+                        Margin="10,15,0,0"
+                        BackgroundColor="Transparent"
+                        Clicked="OnBackButtonClicked"/>
+            
+            <Label Text="Настройки растения"
+                   Grid.Column="1"
+                   FontSize="22"
+                   Margin="20,15,0,0"
+                   HorizontalOptions="Start"
+                   VerticalOptions="Center"
+                   TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"/>
+        </Grid>
+        <!-- Основной контент -->
+        <StackLayout Grid.Row="1" Padding="20" Spacing="15">
+            <!-- Название растения -->
+            <Label x:Name="PhotoTitleLabel"
+                   Text="{Binding Name}"
+                   FontSize="20"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,10"/>
 
-        <!-- Фото растения -->
-        <Image x:Name="PhotoImage"
-               Source="{Binding ImagePath}"
-               Aspect="AspectFill"
-               HeightRequest="300"
-               VerticalOptions="Center"/>
+            <!-- Фото растения -->
+            <Image x:Name="PhotoImage"
+                   Source="{Binding ImagePath}"
+                   Aspect="AspectFill"
+                   HeightRequest="300"
+                   VerticalOptions="Center"/>
 
-        <!-- Род растения -->
-        <Label x:Name="GenusLabel"
-               Text="{Binding Genus, StringFormat='Род: {0}'}"
-               FontSize="20"
-               HorizontalOptions="Center"
-               Margin="0,0,0,10"/>
+            <!-- Род растения -->
+            <Label x:Name="GenusLabel"
+                   Text="{Binding Genus, StringFormat='Род: {0}'}"
+                   FontSize="20"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,10"/>
 
-        <!-- Переключатель уведомлений -->
-        <StackLayout Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Center">
-            <Label Text="Уведомлять" VerticalOptions="Center" FontSize="18"/>
-            <Switch IsToggled="{Binding NeedToNotify}" 
-                    VerticalOptions="Center" 
-                    Toggled="OnNeedToNotifyToggled"/>
+            <!-- Переключатель уведомлений -->
+            <StackLayout Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Center">
+                <Label Text="Уведомлять" VerticalOptions="Center" FontSize="18"/>
+                <Switch IsToggled="{Binding NeedToNotify}" 
+                        VerticalOptions="Center" 
+                        Toggled="OnNeedToNotifyToggled"/>
+            </StackLayout>
+
+            <!-- Измерение Watering -->
+            <Label Text="Частота полива (часы)" FontSize="18" HorizontalOptions="Center"/>
+            <Slider Minimum="12" Maximum="240"
+                    Value="{Binding Watering, Mode=TwoWay}"
+                    MinimumTrackColor="{AppThemeBinding Light={StaticResource LightGreenBackgroundActive}, Dark={StaticResource DarkGreenBackgroundActive}}"
+                    MaximumTrackColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                    ThumbColor="{AppThemeBinding Light={StaticResource DarkGreenBackgroundActive}, Dark={StaticResource LightGreenBackgroundActive}}"
+                    ValueChanged="OnWateringValueChanged"
+                    DragCompleted="OnWateringDragCompleted"/>
+            <Label Text="{Binding Watering, StringFormat='Каждые {0} часа(-ов)'}" 
+                   FontSize="16" 
+                   HorizontalOptions="Center" />
+
+            <!-- Кнопки управления -->
+            <Grid ColumnDefinitions="*, *"
+                  ColumnSpacing="10"
+                  Margin="0,10">
+                
+                <!-- Кнопка "Изменить имя" -->
+                <Border Grid.Column="0"
+                        Padding="8"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkGreenBackground}}"
+                        Stroke="{AppThemeBinding Light=Black, Dark=White}"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 10"
+                        HeightRequest="50">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnSaveButtonClicked"/>
+                    </Border.GestureRecognizers>
+                    <Label Text="Изменить имя"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"
+                           FontSize="16"/>
+                </Border>
+
+                <!-- Кнопка "Удалить" -->
+                <Border Grid.Column="1"
+                        Padding="8"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkGreenBackground}}"
+                        Stroke="{AppThemeBinding Light=Black, Dark=White}"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 10"
+                        HeightRequest="50">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnDeleteButtonClicked"/>
+                    </Border.GestureRecognizers>
+                    <Label Text="Удалить"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"
+                           FontSize="16"/>
+                </Border>
+            </Grid>
         </StackLayout>
-
-        <!-- Измерение Watering -->
-        <Label Text="Частота полива (часы)" FontSize="18" HorizontalOptions="Center"/>
-        <Slider Minimum="12" Maximum="240"
-                Value="{Binding Watering, Mode=TwoWay}"
-                MinimumTrackColor="{StaticResource Primary}"
-                MaximumTrackColor="{StaticResource Gray300}"
-                ThumbColor="{StaticResource Primary}"
-                ValueChanged="OnWateringValueChanged"
-                DragCompleted="OnWateringDragCompleted"/>
-        <Label Text="{Binding Watering, StringFormat='Каждые {0} часа(-ов)'}" 
-               FontSize="16" 
-               HorizontalOptions="Center" />
-
-        <!-- Кнопки управления -->
-        <Button Text="Изменить имя"
-                FontSize="18"
-                Clicked="OnSaveButtonClicked"/>
-        <Button Text="Удалить"
-                FontSize="18"
-                Clicked="OnDeleteButtonClicked"/>
-    </StackLayout>
+    </Grid>
 </ContentPage>

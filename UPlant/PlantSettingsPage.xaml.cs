@@ -71,4 +71,9 @@ public partial class PlantSettingsPage : ContentPage
     {
         await _plantRepository.UpdatePlantAsync(_plant);
     }
+
+    private async void OnBackButtonClicked(object sender, EventArgs e)
+    {
+        await Navigation.PopAsync();
+    }
 }

@@ -94,4 +94,9 @@ public partial class PlantInfoPage : ContentPage
             LoadingIndicator.IsRunning = false;
         }
     }
+
+    private async void OnBackButtonClicked(object sender, EventArgs e)
+    {
+        await Navigation.PopAsync();
+    }
 }

@@ -75,11 +75,17 @@
                 <Border.GestureRecognizers>
                     <TapGestureRecognizer Tapped="OnTakePhotoClicked"/>
                 </Border.GestureRecognizers>
-                <Image Source="camera2.png"
-                       HeightRequest="250"
-                       WidthRequest="250"
-                       HorizontalOptions="Center"
-                       VerticalOptions="Center"/>
+                <VerticalStackLayout Spacing="6">
+                    <Image Source="camera2.png"
+                           HeightRequest="170"
+                           WidthRequest="170"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                    <Label Text="Определить растение"
+                           HorizontalOptions="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"
+                           FontSize="16"/>
+                </VerticalStackLayout>
             </Border>
         </Grid>
 

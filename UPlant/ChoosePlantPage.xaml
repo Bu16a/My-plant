@@ -3,32 +3,66 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="UPlant.ChoosePlantPage"
              Title="Выберите растение"
-             BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}">
+             BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}"
+             NavigationPage.HasNavigationBar="False">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
+        <!-- Заголовок -->
+        <Grid Grid.Row="0"
+              BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}"
+              HeightRequest="50"
+              ColumnDefinitions="Auto,*">
+
+            <ImageButton Grid.Column="0"
+                         Source="back.png"
+                         HeightRequest="32"
+                         WidthRequest="32"
+                         Margin="10,15,0,0"
+                         BackgroundColor="Transparent"
+                         Clicked="OnBackButtonClicked" />
+
+            <Label Text="Выбор растения"
+                   Grid.Column="1"
+                   FontSize="22"
+                   Margin="20,15,0,0"
+                   HorizontalOptions="Start"
+                   VerticalOptions="Center"
+                   TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}" />
+        </Grid>
         <ActivityIndicator x:Name="LoadingIndicator"
                            IsRunning="True"
                            IsVisible="True"
+                           Grid.Row="1"
+                           Margin="0,70,0,0"
                            HorizontalOptions="Center"
-                           VerticalOptions="Center" />
+                           VerticalOptions="Start">
+            <ActivityIndicator.Resources>
+                <Style TargetType="ActivityIndicator">
+                    <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource DarkGreenBackgroundActive}, Dark={StaticResource DarkGreenBackgroundActive}}"/>
+                </Style>
+            </ActivityIndicator.Resources>
+        </ActivityIndicator>
 
         <CollectionView x:Name="ResultCollectionView"
                         IsVisible="False"
                         SelectionMode="Single"
-                        SelectionChanged="OnItemSelected">
+                        Margin="0,15,0,0"
+                        SelectionChanged="OnItemSelected"
+                        Grid.Row="1">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Frame CornerRadius="10"
-                       BorderColor="Gray"
-                       Padding="10"
-                       InputTransparent="True"
-                       Margin="5">
+                           BorderColor="Gray"
+                           Padding="10"
+                           InputTransparent="True"
+                           Margin="10,5">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />

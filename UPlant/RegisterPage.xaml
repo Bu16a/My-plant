@@ -3,20 +3,85 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="UPlant.RegisterPage"
              Title="Регистрация"
-             BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}">
+             BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}"
+             NavigationPage.HasNavigationBar="False">
 
 
-    <VerticalStackLayout VerticalOptions="Center" Padding="20" Spacing="15">
-        <Label Text="Email:" />
-        <Entry x:Name="EmailEntry" Placeholder="Введите email" Keyboard="Email" />
+    <Grid RowDefinitions="Auto,*">
+        <!-- Заголовок -->
+        <Grid Grid.Row="0" 
+              BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}"
+              HeightRequest="50"
+              ColumnDefinitions="*">
+            
+            <Label Text="Регистрация"
+                   Grid.Column="0"
+                   FontSize="22"
+                   Margin="20,15,0,0"
+                   HorizontalOptions="Start"
+                   VerticalOptions="Center"
+                   TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"/>
+        </Grid>
 
-        <Label Text="Пароль:" />
-        <Entry x:Name="PasswordEntry" Placeholder="Введите пароль" IsPassword="True" />
+        <VerticalStackLayout Grid.Row="1" VerticalOptions="Center" Padding="20" Spacing="15">
+            <Label Text="Email:" 
+                   TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"
+                   FontSize="18"/>
+            <Entry x:Name="EmailEntry" 
+                   Placeholder="Введите email" 
+                   Keyboard="Email"
+                   Margin="0,0,0,15"/>
 
-        <Button Text="Зарегистрироваться" Clicked="OnSignUpClicked" />
-        <Button Text="Войти" Clicked="OnSignInClicked" />
+            <Label Text="Пароль:" 
+                   TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"
+                   FontSize="18"/>
+            <Entry x:Name="PasswordEntry" 
+                   Placeholder="Введите пароль" 
+                   IsPassword="True"
+                   Margin="0,0,0,25"/>
 
-        <Label x:Name="StatusLabel" Text="" TextColor="Red" HorizontalOptions="Center" />
-    </VerticalStackLayout>
+            <!-- Кнопки в стиле главной страницы -->
+            <Border Padding="8"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkGreenBackgroundActive}}"
+                    Stroke="{AppThemeBinding Light=Black, Dark=White}"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 10"
+                    HorizontalOptions="Fill"
+                    HeightRequest="50"
+                    Margin="0,0,0,15">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnSignUpClicked"/>
+                </Border.GestureRecognizers>
+                <Label Text="Зарегистрироваться"
+                       TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       FontSize="18"/>
+            </Border>
+
+            <Border Padding="8"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkGreenBackground}}"
+                    Stroke="{AppThemeBinding Light=Black, Dark=White}"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 10"
+                    HorizontalOptions="Fill"
+                    HeightRequest="50">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnSignInClicked"/>
+                </Border.GestureRecognizers>
+                <Label Text="Войти"
+                       TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       FontSize="18"/>
+            </Border>
+
+            <Label x:Name="StatusLabel" 
+                   Text="" 
+                   TextColor="Red" 
+                   HorizontalOptions="Center"
+                   Margin="0,15,0,0"/>
+        </VerticalStackLayout>
+    </Grid>
 
 </ContentPage>
