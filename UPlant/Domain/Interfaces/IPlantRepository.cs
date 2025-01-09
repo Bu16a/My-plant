@@ -11,5 +11,6 @@ public interface IPlantRepository
     Task<string> GetImagePathAsync(string id);
     Task SaveImageAsync(FileResult file, string name);
     Task<List<string>> GetPossiblePlantsAsync(FileResult file, int maxAttempts = 3);
-    Task<int> GetWateringFrequencyAsync(string genus);
+    Task<Dictionary<string, object>> GetPlantInfoAsync(string genus);
+    Task<string> GetGooglePlantImage(string genus);
 } 

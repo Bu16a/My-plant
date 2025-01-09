@@ -134,17 +134,25 @@ public class PlantRepository : IPlantRepository
                 }
             }
         }
-        throw new Exception($"Не удалось распознать растение после {maxAttempts} попыток", lastException);
+        throw new Exception($"Ошибка. Попробуйте позже", lastException);
     }
 
-    public async Task<int> GetWateringFrequencyAsync(string genus)
+    public async Task<Dictionary<string, object>> GetPlantInfoAsync(string genus)
     {
-        var content = new StringContent(JsonSerializer.Serialize(new Dictionary<string, string>() { { "flower", genus } }));
+        var content = new StringContent(JsonSerializer.Serialize(new Dictionary<string, string>() { { "query", genus } }));
         content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-        
-        var result = await _httpClient.PostAsync($"{_serverUrl}get_gz", content);
+        var result = await _httpClient.PostAsync($"{_serverUrl}get_info", content);
         result.EnsureSuccessStatusCode();
-        return JsonSerializer.Deserialize<Dictionary<string, int>>(await result.Content.ReadAsStringAsync())["hz"];
+        return JsonSerializer.Deserialize<Dictionary<string, object>>(await result.Content.ReadAsStringAsync());
+    }
+
+    public async Task<string> GetGooglePlantImage(string genus)
+    {
+        var content = new StringContent(JsonSerializer.Serialize(new Dictionary<string, string>() { { "query", genus } }));
+        content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+        var result = await _httpClient.PostAsync($"{_serverUrl}get_first_image_url", content);
+        result.EnsureSuccessStatusCode();
+        return await result.Content.ReadAsStringAsync();
     }
 
     public void Dispose()

@@ -17,16 +17,41 @@
                            IsVisible="True"
                            HorizontalOptions="Center"
                            VerticalOptions="Center" />
-        <ListView x:Name="ResultListView"
-                  IsVisible="False"
-                  ItemsSource="{Binding Items}"
-                  ItemSelected="OnItemSelected">
-            <ListView.ItemTemplate>
+
+        <CollectionView x:Name="ResultCollectionView"
+                        IsVisible="False"
+                        SelectionMode="Single"
+                        SelectionChanged="OnItemSelected">
+            <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <TextCell Text="{Binding .}"
-                              TextColor="Black"/>
+                    <Frame CornerRadius="10"
+                           BorderColor="Gray"
+                           Padding="10"
+                           InputTransparent="True"
+                           Margin="5">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="50" />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Text="{Binding Text}"
+                                   FontSize="20"
+                                   VerticalOptions="Center"
+                                   Margin="10"
+                                   TextColor="Black" />
+
+                            <Image Grid.Column="1"
+                                   Source="{Binding ImageSource}"
+                                   HeightRequest="80"
+                                   WidthRequest="80"
+                                   VerticalOptions="Center"
+                                   Margin="0,0,10,0"
+                                   HorizontalOptions="End" />
+                        </Grid>
+                    </Frame>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </Grid>
 </ContentPage>

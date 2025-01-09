@@ -21,7 +21,7 @@
                                IsVisible="True"
                                HorizontalOptions="Center"
                                VerticalOptions="Center" />
-            <Label x:Name="WateringFrequencyLabel"
+            <Label x:Name="PlantInfoLabel"
                    Text=""
                    FontSize="16"
                    TextColor="Gray"

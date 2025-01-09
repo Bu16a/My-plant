@@ -1,3 +1,4 @@
+using System.Text.Json;
 using UPlant.Domain.Interfaces;
 using UPlant.Domain.Models;
 
@@ -21,21 +22,35 @@ public partial class PlantInfoPage : ContentPage
         _navigationService = navigationService;
         InitializeComponent();
         PlantNameLabel.Text = genus;
-        LoadWateringFrequencyAsync();
+        LoadPlantInfoAsync();
     }
 
-    private async void LoadWateringFrequencyAsync()
+    private async void LoadPlantInfoAsync()
     {
         try
         {
-            _watering = await _plantRepository.GetWateringFrequencyAsync(_genus);
-            WateringFrequencyLabel.Text = $"Частота полива: раз в {_watering} часов";
-            WateringFrequencyLabel.IsVisible = true;
+            LoadingIndicator.IsRunning = true;
+            LoadingIndicator.IsVisible = true;
+
+            var plantInfo = await _plantRepository.GetPlantInfoAsync(_genus);
+
+            if (plantInfo != null && plantInfo.Any())
+            {
+                if (plantInfo.TryGetValue("Частота полива (раз в неделю)", out var watering) && watering is JsonElement json && json.ValueKind == JsonValueKind.Number)
+                    _watering = 168 / json.GetInt32();
+                PlantInfoLabel.Text = string.Join("\n", plantInfo.Select(entry => $"{entry.Key}: {entry.Value}"));
+                PlantInfoLabel.IsVisible = true;
+            }
+            else
+            {
+                await DisplayAlert("Информация", "Данные о растении отсутствуют.", "OK");
+                await _navigationService.NavigateBackAsync();
+            }
         }
         catch (Exception ex)
         {
             await DisplayAlert("Ошибка", $"Не удалось загрузить данные: {ex.Message}", "OK");
-            await Navigation.PopAsync();
+            await _navigationService.NavigateBackAsync();
         }
         finally
         {
@@ -43,6 +58,7 @@ public partial class PlantInfoPage : ContentPage
             LoadingIndicator.IsVisible = false;
         }
     }
+
 
     private async void OnAddPlantClicked(object sender, EventArgs e)
     {

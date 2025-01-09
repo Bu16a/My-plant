@@ -35,14 +35,7 @@ public partial class MyPlantsPage : ContentPage
         foreach (var plant in plants)
         {
             Plants.Add(plant);
-            _ = Task.Run(async () =>
-            {
-                var imagePath = await _plantRepository.GetImagePathAsync(plant.Id);
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    plant.SetImagePath(imagePath);
-                });
-            });
+            _ = Task.Run(async () => plant.SetImagePath(await _plantRepository.GetImagePathAsync(plant.Id)));
         }
     }
 

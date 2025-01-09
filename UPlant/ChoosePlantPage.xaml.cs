@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using UPlant.Domain.Interfaces;
 
 namespace UPlant;
@@ -8,7 +9,7 @@ public partial class ChoosePlantPage : ContentPage
     private readonly IPlantRepository _plantRepository;
     private readonly IServiceProvider _serviceProvider;
     private readonly INavigationService _navigationService;
-    public ObservableCollection<string> Items { get; set; } = new();
+    public ObservableCollection<PlantSearchResult> Items { get; set; } = new();
     private readonly FileResult _image;
 
     public ChoosePlantPage(FileResult image, IPlantRepository plantRepository, IServiceProvider serviceProvider, INavigationService navigationService)
@@ -18,7 +19,7 @@ public partial class ChoosePlantPage : ContentPage
         _serviceProvider = serviceProvider;
         _navigationService = navigationService;
         InitializeComponent();
-        BindingContext = this;
+        ResultCollectionView.ItemsSource = Items;
         LoadDataAsync();
     }
 
@@ -27,7 +28,7 @@ public partial class ChoosePlantPage : ContentPage
         try
         {
             LoadingIndicator.IsVisible = true;
-            ResultListView.IsVisible = false;
+            ResultCollectionView.IsVisible = false;
 
             var items = await _plantRepository.GetPossiblePlantsAsync(_image, maxAttempts: 3);
             if (items == null || items.Count == 0)
@@ -38,7 +39,7 @@ public partial class ChoosePlantPage : ContentPage
             else
             {
                 foreach (var item in items)
-                    Items.Add(item);
+                    Items.Add(new() { Text = item });
             }
         }
         catch (Exception)
@@ -50,16 +51,22 @@ public partial class ChoosePlantPage : ContentPage
         {
             LoadingIndicator.IsRunning = false;
             LoadingIndicator.IsVisible = false;
-            ResultListView.IsVisible = true;
+            ResultCollectionView.IsVisible = true;
         }
     }
 
-    private async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
+    private async void OnItemSelected(object sender, SelectionChangedEventArgs e)
     {
-        if (e.SelectedItem is string selectedItem)
+        if (e.CurrentSelection.FirstOrDefault() is PlantSearchResult searchResult)
         {
-            await _navigationService.NavigateToAsync<PlantInfoPage>(selectedItem, _image, _plantRepository, _serviceProvider, _navigationService);
-            ((ListView)sender).SelectedItem = null;
+            await _navigationService.NavigateToAsync<PlantInfoPage>(searchResult.Text, _image, _plantRepository, _serviceProvider, _navigationService);
+            ((CollectionView)sender).SelectedItem = null;
         }
     }
+}
+
+public class PlantSearchResult
+{
+    public string Text { get; set; }
+    public string ImageSource => "https://i.pinimg.com/originals/85/ca/90/85ca90f6723dd5327642e99b807a0cb6.jpg";
 }
