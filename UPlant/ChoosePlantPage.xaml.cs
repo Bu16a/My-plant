@@ -39,7 +39,11 @@ public partial class ChoosePlantPage : ContentPage
             else
             {
                 foreach (var item in items)
-                    Items.Add(new() { Text = item });
+                {
+                    var res = new PlantSearchResult() { Text = item, IsImageLoading = true };
+                    Items.Add(res);
+                    _ = Task.Run(async () => await res.FindImageURLAsync(_plantRepository));
+                }
             }
         }
         catch (Exception)
@@ -65,8 +69,43 @@ public partial class ChoosePlantPage : ContentPage
     }
 }
 
-public class PlantSearchResult
+public class PlantSearchResult : INotifyPropertyChanged
 {
+    private string _imageSource;
+    private bool _isImageLoading;
+
     public string Text { get; set; }
-    public string ImageSource => "https://i.pinimg.com/originals/85/ca/90/85ca90f6723dd5327642e99b807a0cb6.jpg";
+
+    public string ImageSource
+    {
+        get => _imageSource;
+        set
+        {
+            _imageSource = value;
+            OnPropertyChanged(nameof(ImageSource));
+        }
+    }
+
+    public bool IsImageLoading
+    {
+        get => _isImageLoading;
+        set
+        {
+            _isImageLoading = value;
+            OnPropertyChanged(nameof(IsImageLoading));
+        }
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    protected virtual void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    public async Task FindImageURLAsync(IPlantRepository plantRepository)
+    {
+        ImageSource = await plantRepository.GetGooglePlantImage(Text);
+        IsImageLoading = false;
+    }
 }

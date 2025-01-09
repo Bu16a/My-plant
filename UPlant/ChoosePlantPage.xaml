@@ -25,29 +25,33 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Frame CornerRadius="10"
-                           BorderColor="Gray"
-                           Padding="10"
-                           InputTransparent="True"
-                           Margin="5">
+                       BorderColor="Gray"
+                       Padding="10"
+                       InputTransparent="True"
+                       Margin="5">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="50" />
+                                <ColumnDefinition Width="80" />
                             </Grid.ColumnDefinitions>
 
                             <Label Text="{Binding Text}"
-                                   FontSize="20"
-                                   VerticalOptions="Center"
-                                   Margin="10"
-                                   TextColor="Black" />
+                               FontSize="20"
+                               VerticalOptions="Center"
+                               Margin="10"
+                               TextColor="Black" />
 
-                            <Image Grid.Column="1"
-                                   Source="{Binding ImageSource}"
-                                   HeightRequest="80"
-                                   WidthRequest="80"
-                                   VerticalOptions="Center"
-                                   Margin="0,0,10,0"
-                                   HorizontalOptions="End" />
+                            <Grid Grid.Column="1"
+                              HeightRequest="80"
+                              WidthRequest="80">
+                                <Image Source="{Binding ImageSource}"
+                                   Aspect="AspectFill"
+                                   IsVisible="{Binding IsImageLoaded}" />
+                                <ActivityIndicator IsRunning="{Binding IsImageLoading}"
+                               IsVisible="{Binding IsImageLoading}"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+                            </Grid>
                         </Grid>
                     </Frame>
                 </DataTemplate>

@@ -150,13 +150,16 @@ public class PlantRepository : IPlantRepository
     {
         var content = new StringContent(JsonSerializer.Serialize(new Dictionary<string, string>() { { "query", genus } }));
         content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-        var result = await _httpClient.PostAsync($"{_serverUrl}get_first_image_url", content);
+        var result = await _httpClient.PostAsync($"{_serverUrl}get-first-image_url", content);
         result.EnsureSuccessStatusCode();
-        return await result.Content.ReadAsStringAsync();
+        var res = JsonSerializer.Deserialize<Dictionary<string, string>>(await result.Content.ReadAsStringAsync());
+        if (res == null || res.ContainsKey("error"))
+            return "";
+        return res["image_url"];
     }
-
+    
     public void Dispose()
     {
         _authService.AuthStateChanged -= OnAuthStateChanged;
     }
-} 
+}

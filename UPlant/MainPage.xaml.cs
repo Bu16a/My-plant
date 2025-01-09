@@ -7,13 +7,15 @@ public partial class MainPage : ContentPage
     private readonly IServiceProvider _serviceProvider;
     private readonly IAuthService _authService;
     private readonly INavigationService _navigationService;
+    private readonly IPlantRepository _plantRepository;
 
-    public MainPage(IServiceProvider serviceProvider, IAuthService authService, INavigationService navigationService)
+    public MainPage(IServiceProvider serviceProvider, IAuthService authService, INavigationService navigationService, IPlantRepository plantRepository)
     {
         InitializeComponent();
         _serviceProvider = serviceProvider;
         _authService = authService;
         _navigationService = navigationService;
+        _plantRepository = plantRepository;
     }
 
     private async void OnTakePhotoClicked(object sender, EventArgs e)
