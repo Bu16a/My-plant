@@ -13,7 +13,7 @@ public partial class PlantInfoPage : ContentPage
     private readonly IServiceProvider _serviceProvider;
     private readonly INavigationService _navigationService;
 
-    public PlantInfoPage(string genus, FileResult image, IPlantRepository plantRepository, IServiceProvider serviceProvider, INavigationService navigationService)
+    public PlantInfoPage(string genus, string url, FileResult image, IPlantRepository plantRepository, IServiceProvider serviceProvider, INavigationService navigationService)
     {
         _genus = genus;
         _image = image;
@@ -22,6 +22,7 @@ public partial class PlantInfoPage : ContentPage
         _navigationService = navigationService;
         InitializeComponent();
         PlantNameLabel.Text = genus;
+        PhotoImage.Source = url;
         LoadPlantInfoAsync();
     }
 

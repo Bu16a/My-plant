@@ -63,7 +63,7 @@ public partial class ChoosePlantPage : ContentPage
     {
         if (e.CurrentSelection.FirstOrDefault() is PlantSearchResult searchResult)
         {
-            await _navigationService.NavigateToAsync<PlantInfoPage>(searchResult.Text, _image, _plantRepository, _serviceProvider, _navigationService);
+            await _navigationService.NavigateToAsync<PlantInfoPage>(searchResult.Text, searchResult.ImageSource, _image, _plantRepository, _serviceProvider, _navigationService);
             ((CollectionView)sender).SelectedItem = null;
         }
     }

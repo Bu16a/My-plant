@@ -36,6 +36,10 @@
                    FontAttributes="Bold"
                    HorizontalOptions="Center"
                    VerticalOptions="Start" />
+            <Image x:Name="PhotoImage"
+                   Aspect="AspectFill"
+                   HeightRequest="300"
+                   VerticalOptions="Center"/>
             <StackLayout>
                 <Label Text="Информация о растении:"
                        FontSize="18"

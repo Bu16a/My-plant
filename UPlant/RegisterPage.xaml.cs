@@ -8,6 +8,15 @@ public partial class RegisterPage : ContentPage
     private readonly IAuthService _authService;
     private readonly INavigationService _navigationService;
 
+    private static readonly Dictionary<string, string> localizedErrors = new()
+    {
+        { "The email address is badly formatted.", "Неправильный email" },
+        { "at least 6 characters", "Пароль должен содержать минимум 6 символов" },
+        { "INVALID_LOGIN_CREDENTIALS", "Неправильный логин или пароль" },
+        { "is already in use", "Данный email уже зарегистрирован" }
+    };
+
+
     public RegisterPage(IAuthService authService, INavigationService navigationService)
     {
         InitializeComponent();
@@ -28,7 +37,7 @@ public partial class RegisterPage : ContentPage
 
         if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
         {
-            ShowError("Email и пароль обязательны!");
+            ShowError("Email и пароль обязательны");
             return;
         }
 
@@ -43,7 +52,7 @@ public partial class RegisterPage : ContentPage
         }
         catch (FirebaseAuthException ex)
         {
-            ShowError(GetLocalizedErrorMessage(ex));
+            ShowError(GetLocalizedErrorMessage(ex.Message));
         }
         catch (Exception)
         {
@@ -57,21 +66,11 @@ public partial class RegisterPage : ContentPage
         StatusLabel.Text = message;
     }
 
-    private string GetLocalizedErrorMessage(FirebaseAuthException ex)
+    private string GetLocalizedErrorMessage(string message)
     {
-        return ex.Reason switch // TODO: BAD LOCALIZATION
-        {
-            FIRAuthError.InvalidEmail => "Неверный формат email",
-            FIRAuthError.WrongPassword => "Неверный пароль",
-            FIRAuthError.WeakPassword => "Слишком простой пароль. Пароль должен содержать как минимум 6 символов",
-            FIRAuthError.EmailAlreadyInUse => "Email уже используется",
-            FIRAuthError.UserNotFound => "Пользователь не найден",
-            FIRAuthError.UserTokenExpired => "Сессия истекла. Пожалуйста, войдите снова",
-            FIRAuthError.InvalidCredential => "Неверные учетные данные",
-            FIRAuthError.UserDisabled => "Аккаунт отключен",
-            FIRAuthError.AccountExistsWithDifferentCredential => "Аккаунт уже существует с другими учетными данными",
-            FIRAuthError.Undefined => "Неизвестная ошибка",
-            _ => $"Ошибка: {ex.Reason}"
-        };
+        foreach (var (sub, error) in localizedErrors)
+            if (message.Contains(sub))
+                return error;
+        return "Неизвестная ошибка";
     }
 }
