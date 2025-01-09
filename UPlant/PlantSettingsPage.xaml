@@ -34,6 +34,7 @@
             <Label x:Name="PhotoTitleLabel"
                    Text="{Binding Name}"
                    FontSize="20"
+                   TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"
                    HorizontalOptions="Center"
                    Margin="0,0,0,10"/>
 
@@ -48,28 +49,36 @@
             <Label x:Name="GenusLabel"
                    Text="{Binding Genus, StringFormat='Род: {0}'}"
                    FontSize="20"
+                   TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"
                    HorizontalOptions="Center"
                    Margin="0,0,0,10"/>
 
             <!-- Переключатель уведомлений -->
             <StackLayout Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Center">
-                <Label Text="Уведомлять" VerticalOptions="Center" FontSize="18"/>
-                <Switch IsToggled="{Binding NeedToNotify}" 
-                        VerticalOptions="Center" 
+                <Label Text="Уведомлять" VerticalOptions="Center" 
+                       FontSize="18"
+                       TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"/>
+                <Switch IsToggled="{Binding NeedToNotify}"
+                        VerticalOptions="Center"
+                        OnColor="{AppThemeBinding Light=#154C19, Dark=#757575}"
+                        ThumbColor="{AppThemeBinding Light=#154C19, Dark=#E0E0E0}"
                         Toggled="OnNeedToNotifyToggled"/>
             </StackLayout>
 
             <!-- Измерение Watering -->
-            <Label Text="Частота полива (часы)" FontSize="18" HorizontalOptions="Center"/>
+            <Label Text="Частота полива (часы)" FontSize="18"
+                   TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"
+                   HorizontalOptions="Center"/>
             <Slider Minimum="12" Maximum="240"
                     Value="{Binding Watering, Mode=TwoWay}"
-                    MinimumTrackColor="{AppThemeBinding Light={StaticResource LightGreenBackgroundActive}, Dark={StaticResource DarkGreenBackgroundActive}}"
-                    MaximumTrackColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                    MinimumTrackColor="{AppThemeBinding Light={StaticResource DarkGreenBackgroundActive}, Dark={StaticResource LightGreenBackgroundActive}}"
+                    MaximumTrackColor="{AppThemeBinding Light={StaticResource LightGreenBackgroundActive}, Dark={StaticResource DarkGreenBackgroundActive}}"
                     ThumbColor="{AppThemeBinding Light={StaticResource DarkGreenBackgroundActive}, Dark={StaticResource LightGreenBackgroundActive}}"
                     ValueChanged="OnWateringValueChanged"
                     DragCompleted="OnWateringDragCompleted"/>
             <Label Text="{Binding Watering, StringFormat='Каждые {0} часа(-ов)'}" 
                    FontSize="16" 
+                   TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"
                    HorizontalOptions="Center" />
 
             <!-- Кнопки управления -->
@@ -80,7 +89,7 @@
                 <!-- Кнопка "Изменить имя" -->
                 <Border Grid.Column="0"
                         Padding="8"
-                        BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkGreenBackground}}"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}"
                         Stroke="{AppThemeBinding Light=Black, Dark=White}"
                         StrokeThickness="1"
                         StrokeShape="RoundRectangle 10"
@@ -98,7 +107,7 @@
                 <!-- Кнопка "Удалить" -->
                 <Border Grid.Column="1"
                         Padding="8"
-                        BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkGreenBackground}}"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}"
                         Stroke="{AppThemeBinding Light=Black, Dark=White}"
                         StrokeThickness="1"
                         StrokeShape="RoundRectangle 10"

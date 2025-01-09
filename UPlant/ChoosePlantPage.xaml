@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:UPlant"
              x:Class="UPlant.ChoosePlantPage"
              Title="Выберите растение"
              BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}"
@@ -52,42 +53,39 @@
 
         <CollectionView x:Name="ResultCollectionView"
                         IsVisible="False"
-                        SelectionMode="Single"
+                        SelectionMode="None"
                         Margin="0,15,0,0"
-                        SelectionChanged="OnItemSelected"
                         Grid.Row="1">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Frame CornerRadius="10"
-                           BorderColor="Gray"
-                           Padding="10"
-                           InputTransparent="True"
-                           Margin="10,5">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="80" />
-                            </Grid.ColumnDefinitions>
-
-                            <Label Text="{Binding Text}"
-                               FontSize="20"
-                               VerticalOptions="Center"
-                               Margin="10"
-                               TextColor="Black" />
-
+                    <Border Margin="10,5"
+                            Padding="10"
+                            Stroke="{AppThemeBinding Light=Black, Dark=White}"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 10">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnItemSelected"/>
+                        </Border.GestureRecognizers>
+                        <Grid ColumnDefinitions="*, Auto">
+                            <!-- Название растения -->
+                            <Label Grid.Column="0" 
+                                   Text="{Binding Text}" 
+                                   FontSize="18"
+                                   VerticalOptions="Center"
+                                   TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}" />
+                            
+                            <!-- Фото растения -->
                             <Grid Grid.Column="1"
-                              HeightRequest="80"
-                              WidthRequest="80">
-                                <Image Source="{Binding ImageSource}"
-                                   Aspect="AspectFill"
-                                   IsVisible="{Binding IsImageLoaded}" />
+                                  HeightRequest="100"
+                                  WidthRequest="100">
                                 <ActivityIndicator IsRunning="{Binding IsImageLoading}"
-                               IsVisible="{Binding IsImageLoading}"
-                               HorizontalOptions="Center"
-                               VerticalOptions="Center" />
+                                                 IsVisible="{Binding IsImageLoading}" />
+                                <Image Source="{Binding ImageSource}"
+                                       Aspect="AspectFill"
+                                       IsVisible="{Binding IsImageLoaded}" />
                             </Grid>
                         </Grid>
-                    </Frame>
+                    </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

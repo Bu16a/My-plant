@@ -42,7 +42,7 @@
 		<MauiIcon Include="Resources\AppIcon\appicon.png" Color="#512BD4" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#00BA6C" BaseSize="200,200"  />
+		<MauiSplashScreen Include="Resources\Images\uplant.png" Color="#00BA6C"/>
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -98,5 +98,11 @@
 	  <MauiXaml Update="PlantInfoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="Platforms\Android\Resources\values\styles.xml" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Platforms\Android\Resources\drawable\" />
 	</ItemGroup>
 </Project>

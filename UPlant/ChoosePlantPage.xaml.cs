@@ -59,12 +59,11 @@ public partial class ChoosePlantPage : ContentPage
         }
     }
 
-    private async void OnItemSelected(object sender, SelectionChangedEventArgs e)
+    private async void OnItemSelected(object sender, EventArgs e)
     {
-        if (e.CurrentSelection.FirstOrDefault() is PlantSearchResult searchResult)
+        if (sender is Element element && element.BindingContext is PlantSearchResult searchResult)
         {
             await _navigationService.NavigateToAsync<PlantInfoPage>(searchResult.Text, searchResult.ImageSource, _image, _plantRepository, _serviceProvider, _navigationService);
-            ((CollectionView)sender).SelectedItem = null;
         }
     }
 
@@ -78,6 +77,7 @@ public class PlantSearchResult : INotifyPropertyChanged
 {
     private string _imageSource;
     private bool _isImageLoading;
+    private bool _isImageLoaded;
 
     public string Text { get; set; }
 
@@ -87,6 +87,7 @@ public class PlantSearchResult : INotifyPropertyChanged
         set
         {
             _imageSource = value;
+            IsImageLoaded = !string.IsNullOrEmpty(value);
             OnPropertyChanged(nameof(ImageSource));
         }
     }
@@ -98,6 +99,16 @@ public class PlantSearchResult : INotifyPropertyChanged
         {
             _isImageLoading = value;
             OnPropertyChanged(nameof(IsImageLoading));
+        }
+    }
+
+    public bool IsImageLoaded
+    {
+        get => _isImageLoaded;
+        set
+        {
+            _isImageLoaded = value;
+            OnPropertyChanged(nameof(IsImageLoaded));
         }
     }
 

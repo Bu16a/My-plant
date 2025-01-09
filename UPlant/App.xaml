@@ -1,14 +1,9 @@
-<?xml version = "1.0" encoding = "UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="UPlant.App">
     <Application.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
-                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-
             <Color x:Key="PrimaryBackgroundColor">White</Color>
             <Color x:Key="SecondaryBackgroundColor">#1C1C1E</Color>
             <Color x:Key="PrimaryTextColor">Black</Color>
@@ -17,22 +12,16 @@
             <Color x:Key="DarkGreenBackground">#1B5E20</Color>
             <Color x:Key="LightGreenBackgroundActive">#C8E6C9</Color>
             <Color x:Key="DarkGreenBackgroundActive">#154C19</Color>
-            <Style x:Key="NavigationButtonStyle" TargetType="ContentView">
-                <Setter Property="BackgroundColor" Value="White"/>
-                <Setter Property="VisualStateManager.VisualStateGroups">
-                    <VisualStateGroupList>
-                        <VisualStateGroup Name="CommonStates">
-                            <VisualState Name="Normal" />
-                            <VisualState Name="Pressed">
-                                <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="#f0f0f0" />
-                                    <Setter Property="Opacity" Value="0.8" />
-                                </VisualState.Setters>
-                            </VisualState>
-                        </VisualStateGroup>
-                    </VisualStateGroupList>
-                </Setter>
-            </Style>
+            <Color x:Key="DarkPageBackground">#35513E</Color>
+            <Color x:Key="Primary">#512BD4</Color>
+            <Color x:Key="Gray100">#E1E1E1</Color>
+            <Color x:Key="Gray200">#C8C8C8</Color>
+            <Color x:Key="Gray300">#ACACAC</Color>
+            <Color x:Key="Gray400">#919191</Color>
+            <Color x:Key="Gray500">#6E6E6E</Color>
+            <Color x:Key="Gray600">#404040</Color>
+            <Color x:Key="Gray900">#212121</Color>
+            <Color x:Key="Gray950">#141414</Color>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
