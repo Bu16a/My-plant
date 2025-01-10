@@ -66,7 +66,6 @@ public partial class PlantInfoPage : ContentPage
         try
         {
             if (_watering == 0) return;
-            AddButton.IsEnabled = false;
             var id = Guid.NewGuid().ToString();
             await _plantRepository.SaveImageAsync(_image, id);
             
@@ -90,7 +89,6 @@ public partial class PlantInfoPage : ContentPage
         }
         finally
         {
-            AddButton.IsEnabled = true;
             LoadingIndicator.IsVisible = false;
             LoadingIndicator.IsRunning = false;
         }

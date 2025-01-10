@@ -5,21 +5,26 @@
              Title="Настройки растения"
              BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}"
              NavigationPage.HasNavigationBar="False">
-    <Grid RowDefinitions="Auto,*">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
         <!-- Заголовок -->
-        <Grid Grid.Row="0" 
+        <Grid Grid.Row="0"
               BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}"
               HeightRequest="50"
               ColumnDefinitions="Auto,*">
-            
+
             <ImageButton Grid.Column="0"
-                        Source="back.png"
-                        HeightRequest="32"
-                        WidthRequest="32"
-                        Margin="10,15,0,0"
-                        BackgroundColor="Transparent"
-                        Clicked="OnBackButtonClicked"/>
-            
+                         Source="back.png"
+                         HeightRequest="32"
+                         WidthRequest="32"
+                         Margin="10,15,0,0"
+                         BackgroundColor="Transparent"
+                         Clicked="OnBackButtonClicked"/>
+
             <Label Text="Настройки растения"
                    Grid.Column="1"
                    FontSize="22"
@@ -28,100 +33,103 @@
                    VerticalOptions="Center"
                    TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"/>
         </Grid>
-        <!-- Основной контент -->
-        <StackLayout Grid.Row="1" Padding="20" Spacing="15">
-            <!-- Название растения -->
-            <Label x:Name="PhotoTitleLabel"
-                   Text="{Binding Name}"
-                   FontSize="20"
-                   TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"
-                   HorizontalOptions="Center"
-                   Margin="0,0,0,10"/>
 
-            <!-- Фото растения -->
-            <Image x:Name="PhotoImage"
-                   Source="{Binding ImagePath}"
-                   Aspect="AspectFill"
-                   HeightRequest="300"
-                   VerticalOptions="Center"/>
+        <!-- Основной контент с прокруткой -->
+        <ScrollView Grid.Row="1" Margin="20,0">
+            <VerticalStackLayout Spacing="15">
+                <!-- Название растения -->
+                <Label x:Name="PhotoTitleLabel"
+                       Text="{Binding Name}"
+                       FontSize="20"
+                       TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"
+                       HorizontalOptions="Center"
+                       Margin="0,0,0,10"/>
 
-            <!-- Род растения -->
-            <Label x:Name="GenusLabel"
-                   Text="{Binding Genus, StringFormat='Род: {0}'}"
-                   FontSize="20"
-                   TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"
-                   HorizontalOptions="Center"
-                   Margin="0,0,0,10"/>
+                <!-- Фото растения -->
+                <Image x:Name="PhotoImage"
+                       Source="{Binding ImagePath}"
+                       Aspect="AspectFill"
+                       HeightRequest="300"
+                       VerticalOptions="Center"/>
 
-            <!-- Переключатель уведомлений -->
-            <StackLayout Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Center">
-                <Label Text="Уведомлять" VerticalOptions="Center" 
+                <!-- Род растения -->
+                <Label x:Name="GenusLabel"
+                       Text="{Binding Genus, StringFormat='Род: {0}'}"
+                       FontSize="20"
+                       TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"
+                       HorizontalOptions="Center"
+                       Margin="0,0,0,10"/>
+
+                <!-- Переключатель уведомлений -->
+                <StackLayout Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Center">
+                    <Label Text="Уведомлять" VerticalOptions="Center" 
+                           FontSize="18"
+                           TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"/>
+                    <Switch IsToggled="{Binding NeedToNotify}"
+                            VerticalOptions="Center"
+                            OnColor="{AppThemeBinding Light=#154C19, Dark=#757575}"
+                            ThumbColor="{AppThemeBinding Light=#154C19, Dark=#E0E0E0}"
+                            Toggled="OnNeedToNotifyToggled"/>
+                </StackLayout>
+
+                <!-- Измерение Watering -->
+                <Label Text="Частота полива (часы)" 
                        FontSize="18"
-                       TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"/>
-                <Switch IsToggled="{Binding NeedToNotify}"
-                        VerticalOptions="Center"
-                        OnColor="{AppThemeBinding Light=#154C19, Dark=#757575}"
-                        ThumbColor="{AppThemeBinding Light=#154C19, Dark=#E0E0E0}"
-                        Toggled="OnNeedToNotifyToggled"/>
-            </StackLayout>
+                       TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"
+                       HorizontalOptions="Center"/>
+                <Slider Minimum="12" Maximum="240"
+                        Value="{Binding Watering, Mode=TwoWay}"
+                        MinimumTrackColor="{AppThemeBinding Light={StaticResource DarkGreenBackgroundActive}, Dark={StaticResource LightGreenBackgroundActive}}"
+                        MaximumTrackColor="{AppThemeBinding Light={StaticResource DarkGreenBackgroundActive}, Dark={StaticResource LightGreenBackgroundActive}}"
+                        ThumbColor="{AppThemeBinding Light={StaticResource DarkGreenBackgroundActive}, Dark={StaticResource LightGreenBackgroundActive}}"
+                        ValueChanged="OnWateringValueChanged"
+                        DragCompleted="OnWateringDragCompleted"/>
+                <Label Text="{Binding Watering, StringFormat='Каждые {0} часа(-ов)'}" 
+                       FontSize="16" 
+                       TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"
+                       HorizontalOptions="Center" />
 
-            <!-- Измерение Watering -->
-            <Label Text="Частота полива (часы)" FontSize="18"
-                   TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"
-                   HorizontalOptions="Center"/>
-            <Slider Minimum="12" Maximum="240"
-                    Value="{Binding Watering, Mode=TwoWay}"
-                    MinimumTrackColor="{AppThemeBinding Light={StaticResource DarkGreenBackgroundActive}, Dark={StaticResource LightGreenBackgroundActive}}"
-                    MaximumTrackColor="{AppThemeBinding Light={StaticResource LightGreenBackgroundActive}, Dark={StaticResource DarkGreenBackgroundActive}}"
-                    ThumbColor="{AppThemeBinding Light={StaticResource DarkGreenBackgroundActive}, Dark={StaticResource LightGreenBackgroundActive}}"
-                    ValueChanged="OnWateringValueChanged"
-                    DragCompleted="OnWateringDragCompleted"/>
-            <Label Text="{Binding Watering, StringFormat='Каждые {0} часа(-ов)'}" 
-                   FontSize="16" 
-                   TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"
-                   HorizontalOptions="Center" />
+                <!-- Кнопки управления -->
+                <Grid ColumnDefinitions="*,*" 
+                      ColumnSpacing="10"
+                      Margin="0,10">
+                    <!-- Кнопка "Изменить имя" -->
+                    <Border Grid.Column="0"
+                            Padding="8"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}"
+                            Stroke="{AppThemeBinding Light=Black, Dark=White}"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 10"
+                            HeightRequest="50">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnSaveButtonClicked"/>
+                        </Border.GestureRecognizers>
+                        <Label Text="Изменить имя"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"
+                               FontSize="16"/>
+                    </Border>
 
-            <!-- Кнопки управления -->
-            <Grid ColumnDefinitions="*, *"
-                  ColumnSpacing="10"
-                  Margin="0,10">
-                
-                <!-- Кнопка "Изменить имя" -->
-                <Border Grid.Column="0"
-                        Padding="8"
-                        BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}"
-                        Stroke="{AppThemeBinding Light=Black, Dark=White}"
-                        StrokeThickness="1"
-                        StrokeShape="RoundRectangle 10"
-                        HeightRequest="50">
-                    <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnSaveButtonClicked"/>
-                    </Border.GestureRecognizers>
-                    <Label Text="Изменить имя"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center"
-                           TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"
-                           FontSize="16"/>
-                </Border>
-
-                <!-- Кнопка "Удалить" -->
-                <Border Grid.Column="1"
-                        Padding="8"
-                        BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}"
-                        Stroke="{AppThemeBinding Light=Black, Dark=White}"
-                        StrokeThickness="1"
-                        StrokeShape="RoundRectangle 10"
-                        HeightRequest="50">
-                    <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnDeleteButtonClicked"/>
-                    </Border.GestureRecognizers>
-                    <Label Text="Удалить"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center"
-                           TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"
-                           FontSize="16"/>
-                </Border>
-            </Grid>
-        </StackLayout>
+                    <!-- Кнопка "Удалить" -->
+                    <Border Grid.Column="1"
+                            Padding="8"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource LightGreenBackground}, Dark={StaticResource DarkPageBackground}}"
+                            Stroke="{AppThemeBinding Light=Black, Dark=White}"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 10"
+                            HeightRequest="50">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnDeleteButtonClicked"/>
+                        </Border.GestureRecognizers>
+                        <Label Text="Удалить"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               TextColor="{AppThemeBinding Light={StaticResource PrimaryTextColor}, Dark={StaticResource SecondaryTextColor}}"
+                               FontSize="16"/>
+                    </Border>
+                </Grid>
+            </VerticalStackLayout>
+        </ScrollView>
     </Grid>
 </ContentPage>
